@@ -3,9 +3,7 @@ import { ME } from './network-config.js';
 export const NETWORKS = { monad: { ...MONAD, key: 'monad', nativeSymbol: 'MON', mockUsdc: true }, me: { ...ME, key: 'me', feed: MONAD.feed, repo: MONAD.repo } };
 export function activeNetwork() {
   const query = new URLSearchParams(globalThis.location?.search || '').get('network');
-  let saved;
-  try { saved = globalThis.localStorage?.getItem('corpus-network'); } catch {}
-  const key = query && NETWORKS[query] ? query : saved && NETWORKS[saved] ? saved : 'monad';
+  const key = query && NETWORKS[query] ? query : 'me';
   if (query && NETWORKS[query]) { try { globalThis.localStorage?.setItem('corpus-network', key); } catch {} }
   return NETWORKS[key];
 }

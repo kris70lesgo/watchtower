@@ -6,7 +6,8 @@ import { landingHtml, landingCss } from '@/lib/generated/templates';
 import { setupLandingInteractions } from './landing-interactions';
 export function Landing() {
   const container = useRef<HTMLDivElement>(null);
-  const { network } = useNetwork();
+  const { networks } = useNetwork();
+  const network = networks.me;
   useEffect(() => {
     const element = container.current; if (!element) return;
     const nav = document.getElementById('nav'), page = element.querySelector<HTMLElement>('#pageRoot'), video = element.querySelector<HTMLVideoElement>('#heroVideo');

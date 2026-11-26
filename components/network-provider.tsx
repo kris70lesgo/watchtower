@@ -4,14 +4,15 @@ import type { NetworkConfig, NetworkKey, Networks } from '@/lib/types';
 type State = { network: NetworkConfig; networks: Networks; ready: boolean; busy: boolean; setBusy: (busy: boolean) => void; select: (key: NetworkKey) => void };
 const Context = createContext<State | null>(null);
 export function NetworkProvider({ networks, children }: { networks: Networks; children: ReactNode }) {
-  const [key, setKey] = useState<NetworkKey>('monad'), [ready, setReady] = useState(false), [busy, setBusy] = useState(false);
+  const [key, setKey] = useState<NetworkKey>('me'), [ready, setReady] = useState(false), [busy, setBusy] = useState(false);
   useEffect(() => {
     const query = new URLSearchParams(location.search).get('network');
-    let saved: string | null = null;
-    try { saved = localStorage.getItem('corpus-network'); } catch {}
-    const next = query === 'me' || query === 'monad' ? query : saved === 'me' ? 'me' : 'monad';
+    const next: NetworkKey = location.pathname === '/' ? 'me' : query === 'monad' ? 'monad' : 'me';
     setKey(next); setReady(true);
     try { localStorage.setItem('corpus-network', next); } catch {}
+    if (location.pathname === '/' && query !== 'me') {
+      const url = new URL(location.href); url.searchParams.set('network', 'me'); history.replaceState(null, '', url);
+    }
   }, []);
   function select(next: NetworkKey) {
     if (busy || !networks[next]) return;

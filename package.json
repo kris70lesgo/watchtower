@@ -1,0 +1,40 @@
+{
+  "name": "watchtower",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "next dev --hostname 127.0.0.1",
+    "build": "npm run compile && node scripts/prepare-next.mjs --production && next build --webpack",
+    "test": "node --test harbor/test/*.test.mjs",
+    "compile": "node harbor/scripts/compile.mjs",
+    "preflight": "node --env-file-if-exists=.env harbor/scripts/preflight.mjs",
+    "deploy:me": "node --env-file-if-exists=.env harbor/scripts/deploy.mjs",
+    "demo:local": "node harbor/scripts/local.mjs",
+    "start": "next start --hostname 127.0.0.1",
+    "prepare:app": "node harbor/scripts/compile.mjs && node scripts/prepare-next.mjs",
+    "typecheck": "tsc --noEmit",
+    "predev": "npm run prepare:app",
+    "predev:demo": "npm run prepare:app",
+    "dev:demo": "node --env-file=.env.demo.local node_modules/next/dist/bin/next dev --hostname 127.0.0.1"
+  },
+  "dependencies": {
+    "@openzeppelin/contracts": "5.4.0",
+    "ethers": "6.17.0",
+    "next": "16.4.6",
+    "react": "19.2.8",
+    "react-dom": "19.2.8",
+    "@next/env": "16.4.6"
+  },
+  "devDependencies": {
+    "ganache": "7.9.2",
+    "solc": "0.8.28",
+    "typescript": "5.9.3",
+    "@types/node": "22.20.5",
+    "@types/react": "19.2.18",
+    "@types/react-dom": "19.2.4"
+  },
+  "engines": {
+    "node": ">=22.12.0"
+  }
+}

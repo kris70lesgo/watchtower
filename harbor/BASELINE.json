@@ -1,0 +1,27 @@
+{
+  "description": "SHA-256 snapshot of inherited files before HARBOR modifications. This folder arrived without .git metadata; these are file hashes, not proof of authorship or historical commits.",
+  "files": {
+    "README.md": "8c265bb015bc80f143a13bd5a74ff4ce1f4a19cd53f5bd2a525d758f188af777",
+    "LICENSE": "1a7d234f0e45c735e2cd499a5f980da81c9e1704f42fb5c8ca74d55b6adacad0",
+    "docs/submission.md": "0f3a93e154a41b6942578268c18349e1e9146f75a35e33459634d530635b20c4",
+    "web/config.js": "ec65975ebbaae62e2706ee9cdc6952479163aac4a96ac99283a9b113ecfa341d",
+    "src/FixingOracle.sol": "c906f6bd7e5ce6fe2b0f7cda35cbe124c0df4f31a8cc761a786467b017f62b7a",
+    "src/FixingReceiver.sol": "27cd4f011b8f18c07587da5364691d1c57cafb181114e5599b868581e02406c5",
+    "src/ComputeToken20.sol": "5db475c6b5369f62f393747ef4883ac9f5eed9152d534fb71fa31a79303d0d33",
+    "src/ComputeToken.sol": "3340423292f43fba0d9f0bbd303754ab1dace9dc06c47f64a73b91239cfad042",
+    "test/MockUSDC.sol": "9528f8f629688e5c5c9cd5677ed29b0562986f1a41e343fc61e46c8a220d4077",
+    "test/FixingOracle.t.sol": "26608bb9313cc4ca916ac1437c2753a3ea4c9694f8ef5da02a98d351bd221aaa",
+    "test/ComputeToken20.t.sol": "8fd1fd63a2173d9b50b13e64ceb299b9494e3c1937bfcca2a487b97fea019777",
+    "test/ComputeToken.t.sol": "e56e7e31a0144a20b060bc328dbe280143123f7d246fc828b4883a1c252ba514",
+    "script/Deploy.s.sol": "2a1f80de39fb81beaa43c37d78a50a455c43298dba771b8f2894022a0199f7a7",
+    "oracle/publisher-sign.mjs": "8bd6ceb5a609e23537f8eee8f616b147c3c1358f016f85149ebad9d069a89557",
+    "oracle/publisher-attest.mjs": "e3290d37a03fda447350bc656a44d8934d50a8a4f3638a25017921a1d23251db",
+    "oracle/verify.mjs": "246e70f5bbbe3fd7f9a95b413cae12cb3be6c508ba2ca0167c4201c24a5276ed",
+    "oracle/README.md": "6cbf6120a2ccfaaa0f6f916c077fb85ec0a98fc0a1c412e0152d19d39ce8221e",
+    "oracle/pay-monad.mjs": "720328a50486a08957db90c51b689bffb3971158ff02460fde5e7fa3de91729d",
+    "oracle/package-lock.json": "061a33a19ec93fcc1bf70ab6c5b59705079c143e45fc41475aa5f1560603b1d8",
+    "oracle/package.json": "bc6e1770fb82887a3325a9bb5335095e2b68d7645d551827a19d6d6f589a76cc",
+    "oracle/relay.mjs": "470729fe51100def9abb214e27bb12758842150629d04ff5c7ff9a7c273f90db",
+    "oracle/fixing-types.mjs": "985520a81eb4c19c7789fadbc37e3a597f2eaef8c0c8d5e953a695156b6ce315"
+  }
+}

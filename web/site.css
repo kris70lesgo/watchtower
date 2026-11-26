@@ -130,3 +130,8 @@ input:focus,select:focus{outline:2px solid var(--green);outline-offset:1px;borde
 .log .step{display:block;color:var(--muted)}
 .log .step.on{color:var(--ink);font-weight:600}
 .log .step.done{color:var(--green-text)}
+
+/* One network selection shared by the corpus pages. */
+.network-select{display:flex;align-items:center;gap:7px;font-family:var(--mono);font-size:10px;color:var(--muted);white-space:nowrap}.network-select select{max-width:165px;border:1px solid var(--rule);border-radius:7px;padding:7px;background:var(--panel);color:var(--ink);font:inherit}.network-select~*{flex-shrink:0}@media(max-width:700px){.nav-in{flex-wrap:wrap;height:auto;min-height:64px;padding-block:10px;gap:10px}.network-select{margin-left:auto}.nav-links{gap:10px}}
+
+.brand img{display:block;flex:none}

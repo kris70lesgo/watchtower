@@ -3,16 +3,15 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<link rel="icon" href="/favicon.ico" sizes="32x32" />
 <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
 <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
-<title>Mint compute · corpusAI on Monad</title>
-<meta name="description" content="Own a corpus machine as a token on Monad. It earns from jobs routed to it while you hold it, trades on its own value, and redeems for a permanently funded machine." />
+<title>Mint compute · Watchtower</title>
+<meta name="description" content="Watchtower compute catalogue, wallet flows, and Meta Earth native-MEC escrow." />
 <link rel="canonical" href="https://hackathon.trycorpus.ai/mint" />
 <meta property="og:type" content="website" />
-<meta property="og:site_name" content="corpusAI" />
+<meta property="og:site_name" content="Watchtower" />
 <meta property="og:locale" content="en_US" />
-<meta property="og:title" content="Mint compute · corpusAI on Monad" />
+<meta property="og:title" content="Mint compute · Watchtower" />
 <meta property="og:description" content="Mint a corpus VM as a token in USDC on Monad. Hold it, send it, or redeem it for the machine." />
 <meta property="og:url" content="https://hackathon.trycorpus.ai/mint" />
 <meta property="og:image" content="https://hackathon.trycorpus.ai/og.jpg" />
@@ -26,10 +25,7 @@
 </head>
 <body>
 <nav class="nav"><div class="wrap nav-in">
-  <a class="brand" href="/">
-    <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><circle class="ring" cx="12" cy="12" r="10" fill="none" stroke-width="1.4"/><rect class="core" x="8.5" y="8.5" width="7" height="7"/></svg>
-    corpusAI <small>on Monad</small>
-  </a>
+  <a class="brand" href="/"><img class="watchtower-lockup" src="/watchtower-logo.svg" alt="Watchtower" width="220" height="48" /></a>
   <div class="nav-links">
     <a href="/">overview</a>
     <a href="/#facets">facets</a>
@@ -42,7 +38,7 @@
 <section class="hero" style="padding-bottom:28px"><div class="wrap">
   <p class="eyebrow">Mint compute</p>
   <h1 style="font-size:clamp(34px,5.6vw,88px)">A machine,<br>as a token.</h1>
-  <p class="hero-lead">One token is one permanently funded corpus machine: a position whose principal is never spent and whose yield pays the monthly bill for as long as it is open. While you hold it, jobs routed to the idle machine earn you yield. It trades on its own value. And it redeems, any time, for the machine itself. The price is corpus's own underwriting, principal plus a buffer, paid once in USDC on Monad.</p>
+  <p class="hero-lead">One token is one permanently funded corpus machine: a position whose principal is never spent and whose yield pays the monthly bill for as long as it is open. While you hold it, jobs routed to the idle machine earn you yield. It trades on its own value. And it redeems, any time, for the machine itself. The price is corpus's own underwriting, principal plus a buffer, paid once in USDC on the selected network.</p>
 </div></section>
 
 <section class="wrap" style="padding-bottom:clamp(64px,9vw,120px)">
@@ -94,28 +90,29 @@
   </div>
 </section>
 
+<!-- CORPUS_COMPUTE_TOOLS -->
 <footer><div class="wrap">
   <div class="f-top">
-    <div><a class="brand" href="https://www.trycorpus.ai"><svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><circle class="ring" cx="12" cy="12" r="10" fill="none" stroke-width="1.4"/><rect class="core" x="8.5" y="8.5" width="7" height="7"/></svg>corpusAI</a><p class="f-b">Permanently funded compute.</p></div>
+    <div><a class="brand" href="/"><img class="watchtower-footer-mark" src="/watchtower-mark.svg" width="42" height="42" alt="" /><span>Watchtower</span></a><p class="f-b">Permanently funded compute.</p></div>
     <div class="f-col"><h4>This submission</h4><ul><li><a href="/">Overview</a></li><li><a href="https://github.com/JTraversa/corpus-monad">Source</a></li></ul></div>
     <div class="f-col"><h4>corpusAI Cloud Pricing</h4><ul><li><a href="https://cloud.trycorpus.ai/charts">Charts</a></li><li><a href="https://cloud.trycorpus.ai/docs">API</a></li><li><a href="https://cloud.trycorpus.ai/x402">Pay per request (x402)</a></li></ul></div>
     <div class="f-col"><h4>Contact</h4><ul><li><a href="mailto:hello@trycorpus.ai">hello@trycorpus.ai</a></li><li><a href="https://www.trycorpus.ai/terms">Terms</a></li><li><a href="https://www.trycorpus.ai/privacy">Privacy</a></li></ul></div>
   </div>
-  <div class="f-bottom"><p class="legal">© 2026 corpusAI. A hackathon proof of concept on Fly-sized machines; the yearly rate positions are priced at is not a quote or a guarantee. Nothing on this page is an offer to sell a security or a commodity contract.</p><p class="built">Built by <a href="https://x.com/TraversaJulian">Julian Traversa</a> and Alexandra</p></div>
+  <div class="f-bottom"><p class="legal">© 2026 Watchtower. A hackathon proof of concept on Fly-sized machines; the yearly rate positions are priced at is not a quote or a guarantee. Nothing on this page is an offer to sell a security or a commodity contract.</p></div>
 </div></footer>
 
 <script type="module">
-import { CONFIG } from '/config.js';
+import { CONFIG } from '/networks.js';
 import { createPublicClient, createWalletClient, custom, http, parseAbi, formatUnits, keccak256, toHex } from 'https://esm.sh/viem@2';
 const q = new URLSearchParams(location.search);
 const TOKEN = q.get('token') || CONFIG.token;
 if (q.get('acct')) { document.querySelector('#r-acct').value = q.get('acct'); }
-const chain = { id: CONFIG.chainId, name: CONFIG.chainName, nativeCurrency: { name: 'MON', symbol: 'MON', decimals: 18 }, rpcUrls: { default: { http: [CONFIG.rpc] } }, blockExplorers: { default: { name: 'Monad Explorer', url: CONFIG.explorer } } };
+const chain = { id: CONFIG.chainId, name: CONFIG.chainName, nativeCurrency: { name: CONFIG.nativeSymbol, symbol: CONFIG.nativeSymbol, decimals: 18 }, rpcUrls: { default: { http: [CONFIG.rpc] } }, ...(CONFIG.explorer ? { blockExplorers: { default: { name: CONFIG.chainName + ' Explorer', url: CONFIG.explorer } } } : {}) };
 const abi = parseAbi(['function usdc() view returns (address)','function typeCount() view returns (uint256)','function types(uint256) view returns (string,string,uint256,uint256,uint256,bool)','function totalSupply(uint256) view returns (uint256)','function balanceOf(address,uint256) view returns (uint256)','function mint(uint256,uint256) returns (uint256)','function redeem(uint256,uint256,bytes32)']);
-const erc20 = parseAbi(['function allowance(address,address) view returns (uint256)','function approve(address,uint256) returns (bool)','function balanceOf(address) view returns (uint256)']);
+const erc20 = parseAbi(['function allowance(address,address) view returns (uint256)','function approve(address,uint256) returns (bool)','function balanceOf(address) view returns (uint256)','function mint(address,uint256)']);
 const pub = createPublicClient({ chain, transport: http(CONFIG.rpc) });
 const $ = (s) => document.querySelector(s); let wal, me, types = [];
-const txLink = (h) => `<a href="${CONFIG.explorer}/tx/${h}">${h.slice(0, 10)}…${h.slice(-6)}</a>`;
+const txLink = (h) => CONFIG.explorer ? `<a href="${CONFIG.explorer}/tx/${h}">${h.slice(0, 10)}…${h.slice(-6)}</a>` : `<span class="mono">${h}</span>`;
 const log = (html) => { $('#log').innerHTML = html; };
 const money = (v) => '$' + Number(formatUnits(v, 6)).toFixed(2);
 
@@ -128,10 +125,11 @@ if (!TOKEN) {
   $('#rows').innerHTML = types.map((t) => `<tr><td>${t.label}<div class="addr">${t.slug} · permanent</div></td><td class="num">${money(t.monthly)}</td><td class="num">${money(t.price)}<div class="addr">principal ${money(t.principal)}</div></td><td class="num">—</td><td class="num tr-hold zero">0</td></tr>`).join('');
   const opts = types.map((t) => `<option value="${t.id}">${t.label} · ${money(t.price)}</option>`).join(''); $('#m-id').innerHTML = opts; $('#r-id').innerHTML = opts; $('#m-id').value = '2'; $('#r-id').value = '2'; total();
 }
-else $('#token-note').innerHTML = `ComputeToken <a href="${CONFIG.explorer}/address/${TOKEN}" class="mono">${TOKEN}</a> on ${CONFIG.chainName}. Payments use the testnet mock USDC at <span class="mono">${CONFIG.usdc}</span>; ask hello@trycorpus.ai for test balance. Two s1-256 tokens were operator-issued to seed the Kuru market.`;
-
+else $('#token-note').textContent = `ComputeToken ${TOKEN} on ${CONFIG.chainName}. Payment asset: ${CONFIG.mockUsdc ? 'test-only mock USDC' : 'configured six-decimal payment token'} ${CONFIG.usdc}.` + (CONFIG.key === 'me' ? ' The token preserves the corpus claim model; automatic machine provisioning and an ME treasury yield adapter still require backend integration.' : '');
 async function load() {
   if (!TOKEN) return;
+  if (await pub.getChainId() !== CONFIG.chainId) throw new Error('RPC chain mismatch');
+  if (!(await pub.getBytecode({ address: TOKEN }))) throw new Error('ComputeToken has not been deployed on this network');
   const n = Number(await pub.readContract({ address: TOKEN, abi, functionName: 'typeCount' })); types = [];
   const pause = (ms) => new Promise((r) => setTimeout(r, ms)); // the public Monad RPC allows 15 requests a second
   for (let id = 0; id < n; id++) {
@@ -154,6 +152,7 @@ $('#m-id').onchange = total; $('#m-qty').oninput = total;
 const busy = (sel, on) => { const b = $(sel); b.classList.toggle('busy', on); b.disabled = on || !me; };
 const steps = (list, current, doneCount) => { $('#log').classList.add('pending'); $('#log').innerHTML = list.map((t, i) => `<span class="step ${i < doneCount ? 'done' : i === current ? 'on' : ''}">${i < doneCount ? '✓' : i === current ? '…' : '·'} ${t}</span>`).join(''); };
 async function send(fn, what, onSent) {
+  if (!wal || await wal.getChainId() !== CONFIG.chainId) throw new Error('Reconnect your wallet to ' + CONFIG.chainName);
   const { request } = await pub.simulateContract({ ...fn, account: me });
   const hash = await wal.writeContract(request); if (onSent) onSent(hash);
   const rc = await pub.waitForTransactionReceipt({ hash }); if (rc.status !== 'success') throw new Error(what + ' reverted'); return hash;
@@ -162,10 +161,10 @@ async function mint() { busy('#mint', true); try {
   const t = types[+$('#m-id').value]; const qty = BigInt(Math.max(1, +$('#m-qty').value || 1)); const cost = t.price * qty;
   const usdc = await pub.readContract({ address: TOKEN, abi, functionName: 'usdc' });
   const bal = await pub.readContract({ address: usdc, abi: erc20, functionName: 'balanceOf', args: [me] });
-  if (bal < cost) { log(`You hold ${money(bal)} USDC on Monad and this mint costs ${money(cost)}.`); return; }
+  if (bal < cost) { log(`You hold ${money(bal)} USDC on ${CONFIG.chainName} and this mint costs ${money(cost)}.`); return; }
   const allowance = await pub.readContract({ address: usdc, abi: erc20, functionName: 'allowance', args: [me, TOKEN] });
   const needApprove = allowance < cost;
-  const list = [...(needApprove ? ['Approve USDC in your wallet', 'Approval confirming on Monad'] : []), 'Confirm the mint in your wallet', 'Mint confirming on Monad'];
+  const list = [...(needApprove ? ['Approve USDC in your wallet', 'Approval confirming on ' + CONFIG.chainName] : []), 'Confirm the mint in your wallet', 'Mint confirming on ' + CONFIG.chainName];
   let step = 0; steps(list, step, 0);
   let approveTx;
   if (needApprove) { approveTx = await send({ address: usdc, abi: erc20, functionName: 'approve', args: [TOKEN, cost] }, 'Approval', () => { step = 1; steps(list, step, 1); }); step = 2; steps(list, step, 2); }
@@ -179,7 +178,7 @@ $('#redeem').onclick = async () => { busy('#redeem', true); try {
   if (!acct) { log('Name the corpus account that should receive the machine.'); return; }
   if (t.held < qty) { log(`You hold ${t.held} of ${t.label}.`); return; }
   const ref = keccak256(toHex(acct));
-  const list = ['Confirm the redeem in your wallet', 'Redeem confirming on Monad']; steps(list, 0, 0);
+  const list = ['Confirm the redeem in your wallet', 'Redeem confirming on ' + CONFIG.chainName]; steps(list, 0, 0);
   const tx = await send({ address: TOKEN, abi, functionName: 'redeem', args: [BigInt(t.id), qty, ref] }, 'Redeem', () => steps(list, 1, 1));
   $('#log').classList.remove('pending');
   log(`Redeemed ${qty} × ${t.label} to account reference <span class="mono">${ref.slice(0, 18)}…</span>. ${txLink(tx)}. corpus opens the position from this event.`); load();
@@ -192,7 +191,15 @@ $('#connect').onclick = async () => { try {
   $('#who').textContent = me.slice(0, 6) + '…' + me.slice(-4); $('#dot').classList.add('on'); $('#connect').textContent = 'Connected';
   log('Connected on ' + CONFIG.chainName + '.'); load();
 } catch (e) { log('Error: ' + (e.shortMessage || e.message)); } };
-load();
+$('#chainlabel').textContent = CONFIG.chainName + ' · chain ' + CONFIG.chainId;
+if (CONFIG.key === 'me') {
+  document.title = 'Mint compute · Watchtower on Meta Earth';
+  $('#log').textContent = 'Connect a wallet on ' + CONFIG.chainName + ' to mint the same corpus compute token.';
+}
+window.ethereum?.on?.('chainChanged', () => { wal = undefined; me = undefined; $('#mint').disabled = true; $('#redeem').disabled = true; $('#connect').textContent = 'Reconnect wallet'; $('#who').textContent = 'Network changed'; });
+window.ethereum?.on?.('accountsChanged', () => location.reload());
+load().catch(e => log('Unable to load compute on ' + CONFIG.chainName + ': ' + (e.shortMessage || e.message)));
 </script>
+<script type="module" src="/network-controls.js"></script>
 </body>
 </html>

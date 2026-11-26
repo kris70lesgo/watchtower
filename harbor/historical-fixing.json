@@ -1,0 +1,6 @@
+{
+  "attestation": {
+    "message": { "ticker": "CX.H100SXM.NEO", "day": "2026-10-01", "valueE18": "3900000000000000000", "n": 13, "methodology": "2026.09.14-2" },
+    "signature": "0x4501b7130f418a8fff46e14037416d51e470cbe62ddfe02cb3f316e1ad1c66585140514ffe3dbe92ac99e81a5116ab5b3ad3bd3a3df8967a677fe3c8807eddc81c"
+  }
+}

@@ -3,17 +3,16 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<link rel="icon" href="/favicon.ico" sizes="32x32" />
 <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
 <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
-<title>corpusAI on Monad · Compute you own, yield you keep</title>
-<meta name="description" content="corpusAI on Monad: own compute as a token. It earns yield from jobs routed to it while you hold it, trades on its own value, and redeems for the machine itself. Underneath, a verifiable compute price oracle, x402 payments for prices on Monad, and a treasury that puts the float to work in Monad DeFi." />
+<title>Watchtower · Compute, in your terms</title>
+<meta name="description" content="Watchtower brings signed compute pricing, machine ownership, and native-MEC order escrow together across Monad and Meta Earth." />
 <link rel="canonical" href="https://hackathon.trycorpus.ai/" />
 <meta property="og:type" content="website" />
-<meta property="og:site_name" content="corpusAI" />
+<meta property="og:site_name" content="Watchtower" />
 <meta property="og:locale" content="en_US" />
-<meta property="og:title" content="corpusAI on Monad · Compute you own, yield you keep" />
-<meta property="og:description" content="Own compute as a token on Monad: earn from jobs routed to it, trade it, or redeem it for the machine. A Monad Metropolis submission." />
+<meta property="og:title" content="Watchtower · Compute, in your terms" />
+<meta property="og:description" content="Signed compute pricing, tokenized machine ownership on Monad, and a native-MEC escrow path prepared for Meta Earth testnet." />
 <meta property="og:url" content="https://hackathon.trycorpus.ai/" />
 <meta property="og:image" content="https://hackathon.trycorpus.ai/og.jpg" />
 <meta property="og:image:alt" content="The corpusAI and Monad coins in ink, over the headline: Compute you own. Yield you keep." />
@@ -69,16 +68,202 @@ html:not(.lock) .lockup{opacity:1;transform:none}
 .me ul span{color:var(--faint);margin-right:6px}
 @media(max-width:560px){.me{flex-direction:column;align-items:flex-start}}
 @media(max-width:520px){.hero-content .wrap{padding-left:clamp(28px,5.5vw,88px)}.scroll-hint{display:none}.brand .on{font-size:0;gap:0}.brand .on svg{width:16px;height:16px}}
+/* First landing refresh: a warm, animated compute hero with a truthful protocol strip. */
+:root{--hero-cream:#fbf6ef;--hero-ink:#191914;--hero-hot:#c7673c}
+.nav{position:fixed;inset:0 0 auto;z-index:60;background:transparent;backdrop-filter:none;border-bottom:1px solid rgba(25,25,20,.12);transition:background .25s,border-color .25s,transform 1500ms cubic-bezier(.65,0,.35,1)}
+.nav.scrolled{background:rgba(251,246,239,.88);backdrop-filter:blur(14px);border-color:rgba(25,25,20,.12)}
+.nav .nav-in{width:100%;max-width:none;height:78px;padding-inline:clamp(20px,5vw,72px);gap:clamp(16px,2.8vw,38px)}
+.nav .brand{font-size:19px;white-space:nowrap;color:var(--hero-ink)}
+.nav .brand small{font-size:11px;white-space:nowrap;color:rgba(25,25,20,.58)}
+.nav-links--landing{gap:clamp(15px,2.15vw,32px);font-family:var(--sans);font-size:12.5px;letter-spacing:0}
+.nav-links--landing a{color:rgba(25,25,20,.72)}
+.nav-links--landing .nav-cta{background:var(--hero-ink);color:var(--hero-cream)!important;border-radius:999px;padding:10px 17px}
+.nav-links--landing .nav-cta:hover{background:#c7673c;color:#fff!important}
+.network-select--landing{font-family:var(--sans);font-size:10px;color:rgba(25,25,20,.65);gap:6px}
+.network-select--landing select{max-width:148px;border-color:rgba(25,25,20,.18);border-radius:999px;padding:8px 26px 8px 11px;background:rgba(255,255,255,.28);color:var(--hero-ink);font-size:10px}
+.hero-video{z-index:0;opacity:.22;filter:saturate(.32) contrast(.9) brightness(1.15);mix-blend-mode:multiply;object-position:50% 58%;transition:height 1500ms cubic-bezier(.65,0,.35,1),object-position 1500ms cubic-bezier(.65,0,.35,1),opacity .4s}
+.hero-video.settled{height:75svh;min-height:0;object-position:50% 54%;-webkit-mask-image:linear-gradient(to bottom,#000 58%,transparent 100%);mask-image:linear-gradient(to bottom,#000 58%,transparent 100%)}
+.page-root{z-index:1}
+.hero-v2{position:relative;isolation:isolate;height:75svh;min-height:0;padding:0;overflow:hidden;background:linear-gradient(145deg,#f2ecdf 0%,#f4ebc6 100%);color:var(--hero-ink)}
+.hero-v2::after{content:"";position:absolute;z-index:0;inset:0;pointer-events:none;background-image:radial-gradient(rgba(34,31,25,.11) .55px,transparent .75px),radial-gradient(ellipse at 18% 100%,rgba(255,255,255,.4),transparent 44%);background-size:4px 4px,100% 100%;opacity:.23;mix-blend-mode:multiply}
+.hero-palette{position:absolute;z-index:0;inset:0;opacity:0;pointer-events:none;animation:hero-panel 7s linear infinite}
+.hero-palette--price{background:radial-gradient(ellipse at 86% 82%,rgba(246,222,104,.7),transparent 46%),radial-gradient(ellipse at 26% 104%,rgba(255,255,255,.42),transparent 40%),linear-gradient(160deg,#f2ecdf,#f4ebc6);animation-delay:0s;opacity:1}
+.hero-palette--verify{background:radial-gradient(ellipse at 86% 82%,rgba(249,150,84,.55),transparent 46%),radial-gradient(ellipse at 22% 110%,rgba(255,255,255,.43),transparent 40%),linear-gradient(160deg,#f8dcc7,#f9cba9);animation-delay:-1.75s}
+.hero-palette--own{background:radial-gradient(ellipse at 86% 82%,rgba(150,206,150,.55),transparent 46%),radial-gradient(ellipse at 22% 110%,rgba(255,255,255,.43),transparent 40%),linear-gradient(160deg,#e9ebe0,#dfe9d4);animation-delay:-3.5s}
+.hero-palette--settle{background:radial-gradient(ellipse at 86% 82%,rgba(222,150,200,.5),transparent 46%),radial-gradient(ellipse at 22% 110%,rgba(255,255,255,.43),transparent 40%),linear-gradient(160deg,#f0e4e6,#ecd6e2);animation-delay:-5.25s}
+@keyframes hero-panel{0%,21%{opacity:1}25%,100%{opacity:0}}
+.hero-layout{position:absolute;z-index:2;inset:clamp(140px,18.5vh,192px) clamp(28px,7.8vw,112px) clamp(54px,8vh,82px);display:grid;grid-template-columns:minmax(0,1.35fr) minmax(265px,.58fr);gap:5vw;align-items:center}
+.hero-copy{display:block;position:relative;isolation:auto}
+.hero-copy::before{display:none}
+.hero-v2 .eyebrow{color:rgba(25,25,20,.66);font-size:11px;letter-spacing:.1em;gap:9px}
+.hero-v2 .eyebrow:before{width:7px;height:7px;border-radius:50%;background:#c7673c;box-shadow:0 0 0 4px rgba(199,103,60,.12)}
+.hero-headline{margin-top:24px!important;font-family:var(--display);font-weight:500!important;text-transform:none!important;font-size:clamp(82px,11.1vw,164px)!important;line-height:.88!important;letter-spacing:-.075em!important;white-space:nowrap;text-wrap:initial!important}
+.hero-cycle{position:relative;display:inline-block;vertical-align:baseline;width:8.7ch;height:1em;margin-right:.12em}
+.cycle-item{position:absolute;inset:0 auto auto 0;display:flex;align-items:center;gap:.16em;white-space:nowrap;opacity:0;transform:translateY(.27em) scale(.97);filter:blur(10px);animation:hero-word 7s cubic-bezier(.2,.8,.2,1) infinite}
+.cycle-price{animation-delay:0s}.cycle-verify{animation-delay:-1.75s}.cycle-own{animation-delay:-3.5s}.cycle-settle{animation-delay:-5.25s}
+@keyframes hero-word{0%{opacity:0;transform:translateY(.28em) scale(.97);filter:blur(10px)}6%,20%{opacity:1;transform:translateY(0) scale(1);filter:blur(0)}25%,100%{opacity:0;transform:translateY(-.16em) scale(.99);filter:blur(8px)}}
+.hero-icon{position:relative;display:grid;place-items:center;flex:none;width:.77em;height:.77em;border-radius:29%;box-shadow:inset 0 1px 1px rgba(255,255,255,.82),0 10px 22px rgba(83,54,31,.16);transform:translateY(-.035em);isolation:isolate}
+.hero-icon::after{content:"";position:absolute;inset:1px 1px 52%;border-radius:inherit;background:linear-gradient(180deg,rgba(255,255,255,.56),rgba(255,255,255,0));pointer-events:none}
+.hero-icon svg{width:64%;height:64%;fill:none;stroke:#fffdf7;stroke-width:3.2;stroke-linecap:round;stroke-linejoin:round;filter:drop-shadow(0 1px 1px rgba(55,42,34,.24))}
+.cycle-price .hero-icon{background:radial-gradient(circle at 32% 20%,#f7df76,#dfb52f 70%,#c49421)}
+.cycle-verify .hero-icon{background:radial-gradient(circle at 32% 20%,#ffad78,#eb7739 70%,#cc562b)}
+.cycle-own .hero-icon{background:radial-gradient(circle at 32% 20%,#a9d7a5,#6dad79 70%,#4b8f5f)}
+.cycle-settle .hero-icon{background:radial-gradient(circle at 32% 20%,#e7acd2,#c376ad 70%,#a75a92)}
+.hero-static{font-size:.92em;letter-spacing:-.085em}
+.hero-note{margin-top:26px;font-family:var(--mono);font-size:12px;letter-spacing:.04em;text-transform:uppercase;color:rgba(25,25,20,.58)}
+.hero-detail{align-self:end;max-width:440px;padding:0 0 10px 22px;border-left:1px solid rgba(25,25,20,.24);margin-bottom:5px}
+.hero-detail>p{font-size:clamp(15px,1.3vw,18px);line-height:1.58;color:rgba(25,25,20,.76);max-width:38ch}
+.hero-actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:22px}
+.hero-button{display:inline-flex;align-items:center;justify-content:center;gap:20px;min-height:44px;padding:0 17px;border:1px solid rgba(25,25,20,.26);border-radius:999px;text-decoration:none;font-size:12px;font-weight:500;transition:transform .25s,background .25s,color .25s,border-color .25s}
+.hero-button:hover{transform:translateY(-2px)}
+.hero-button--dark{background:var(--hero-ink);border-color:var(--hero-ink);color:#fff}
+.hero-button--dark:hover{background:#c7673c;border-color:#c7673c}
+.hero-button--line{background:rgba(255,255,255,.18);color:var(--hero-ink)}
+.hero-button--line:hover{background:rgba(255,255,255,.58);border-color:rgba(25,25,20,.4)}
+.hero-v2 .scroll-hint{display:none}
+.hero-sub{position:relative;height:25svh;min-height:180px;padding:0;overflow:hidden;background:var(--hero-cream);color:var(--hero-ink)}
+.hero-notch{position:absolute;inset:0 0 auto;width:100%;height:64px;fill:var(--hero-cream)}
+.hero-sub-inner{position:relative;z-index:1;display:grid;grid-template-columns:1.1fr repeat(3,minmax(0,1fr));gap:clamp(14px,3vw,42px);align-items:end;height:100%;max-width:1440px;margin:auto;padding:74px clamp(28px,7.8vw,112px) 26px}
+.strip-intro{display:flex;flex-direction:column;gap:12px}
+.strip-kicker,.feature-index{font-family:var(--mono);font-size:9px;letter-spacing:.11em;color:rgba(25,25,20,.55)}
+.strip-intro strong{font-family:Georgia,serif;font-size:clamp(21px,2vw,28px);font-weight:400;line-height:1.04;letter-spacing:-.04em}
+.hero-feature{min-height:81px;padding-left:14px;border-left:1px solid rgba(25,25,20,.16);display:flex;flex-direction:column;justify-content:flex-end;gap:5px}
+.hero-feature strong{font-size:clamp(13px,1.15vw,16px);font-weight:500;letter-spacing:-.025em}
+.hero-feature>span:last-child{font-size:10px;color:rgba(25,25,20,.59);line-height:1.4}
+.strip-scroll{position:absolute;right:clamp(28px,7.8vw,112px);top:12px;display:flex;align-items:center;gap:8px;text-decoration:none;color:rgba(25,25,20,.57);font-size:10px}
+.strip-scroll span{font-size:15px}
+@media(max-width:960px){.nav .nav-in{height:68px;padding-inline:22px;gap:16px}.nav-links--landing{gap:10px}.nav-links--landing a:not(.nav-cta){display:none}.network-select--landing{margin-left:auto}.hero-layout{inset-inline:6vw;grid-template-columns:minmax(0,1fr) minmax(230px,.58fr);gap:3vw}.hero-headline{font-size:clamp(72px,11.3vw,120px)!important}.hero-sub-inner{padding-inline:6vw;gap:18px}.strip-scroll{right:6vw}}
+@media(min-width:761px) and (max-width:960px){.hero-headline{font-size:clamp(62px,9.3vw,88px)!important}.hero-static{font-size:.92em}}
+@media(max-width:760px){.nav .nav-in{height:64px;padding-inline:16px;gap:8px}.nav .brand{font-size:17px;gap:7px}.nav .brand small{display:none}.nav-links--landing{margin-left:0}.nav-links--landing .nav-cta{padding:9px 12px;font-size:11px}.network-select--landing{font-size:9px}.network-select--landing select{max-width:116px;padding:7px 20px 7px 9px;font-size:9px}.hero-video.settled{height:70svh}.hero-v2{height:auto;min-height:720px;min-height:78svh}.hero-layout{position:relative;inset:auto;display:flex;flex-direction:column;align-items:stretch;justify-content:center;gap:32px;min-height:inherit;padding:132px 22px 62px}.hero-headline{font-size:clamp(46px,12vw,82px)!important;line-height:.92!important;letter-spacing:-.075em!important;margin-top:20px!important}.hero-cycle{width:8.7ch}.hero-note{font-size:10px;margin-top:18px}.hero-detail{align-self:flex-start;max-width:440px;margin:0 0 0 4px;padding:0 0 0 16px}.hero-detail>p{font-size:15px}.hero-actions{margin-top:18px}.hero-v2 .scroll-hint{display:none}.hero-sub{height:auto;min-height:380px}.hero-sub-inner{grid-template-columns:repeat(2,minmax(0,1fr));gap:26px 18px;padding:82px 22px 28px}.strip-intro{grid-column:1/-1;flex-direction:row;align-items:flex-end;justify-content:space-between;gap:18px}.strip-intro strong{font-size:23px}.hero-feature{min-height:74px;padding-left:10px}.hero-feature strong{font-size:13px}.hero-feature>span:last-child{font-size:9px}.strip-scroll{right:22px;top:14px;font-size:9px}}
+@media(max-width:400px){.nav .brand{font-size:15px}.nav .brand svg{width:17px;height:17px}.network-select--landing{gap:4px;font-size:8px}.network-select--landing select{max-width:106px}.nav-links--landing .nav-cta{font-size:10px;padding-inline:10px}.hero-layout{padding-inline:18px}.hero-headline{font-size:11.6vw!important}.hero-sub-inner{padding-inline:18px}}
+@media(prefers-reduced-motion:reduce){.hero-palette,.cycle-item{animation:none}.hero-palette{display:none}.hero-palette--verify{display:block;opacity:1}.cycle-item{display:none;opacity:0;filter:none;transform:none}.cycle-verify{display:flex;opacity:1}.hero-button{transition:none}}
+
+/* Performance stage: the three cards use real protocol facts instead of sample vanity metrics. */
+.performance-stage{position:relative;isolation:isolate;min-height:100svh;display:flex;align-items:center;overflow:hidden;background:#ececeb;color:#222}
+.performance-stage::before{content:"";position:absolute;z-index:1;inset:0;background:linear-gradient(180deg,rgba(236,236,235,.68),rgba(236,236,235,.88) 44%,rgba(236,236,235,.75))}
+.stage-motion{position:absolute;z-index:0;inset:0;width:100%;height:100%;object-fit:cover;pointer-events:none;opacity:.42}
+.stage-motion--narrow{display:none}
+.performance-shell{position:relative;z-index:2;display:flex;flex-direction:column;justify-content:center;gap:clamp(20px,3vh,34px);width:100%;max-width:1440px;min-height:100svh;margin:auto;padding:clamp(40px,6vh,72px) clamp(18px,3.7vw,54px) clamp(28px,4vh,48px)}
+.performance-head{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(260px,.65fr);align-items:end;gap:clamp(20px,4vw,58px)}
+.performance-eyebrow,.machine-eyebrow{font:500 10px/1.4 var(--mono);letter-spacing:.1em;color:#55575b}
+.performance-head h2{margin-top:10px;font:400 clamp(30px,4.3vw,58px)/1.04 var(--sans);letter-spacing:-.045em;color:#202020}
+.performance-head h2 span{display:inline-flex;align-items:center;gap:.22em}
+.performance-head h2 i{display:inline-block;width:.22em;height:.22em;border-radius:50%;background:#ad314d;box-shadow:0 0 0 .11em rgba(173,49,77,.13);transform:translateY(-.08em)}
+.performance-head>p{max-width:41ch;margin:0 0 4px;color:#4a4a4a;font-size:clamp(13px,1.3vw,17px);line-height:1.6}
+.performance-cards{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));justify-content:center;gap:clamp(10px,1.5vw,23px);width:100%;}
+.performance-card{position:relative;isolation:isolate;container-type:inline-size;aspect-ratio:429/554;overflow:hidden;display:flex;flex-direction:column;align-items:flex-start;padding:6.2% 6.8%;border:1px solid rgba(255,255,255,.48);border-radius:clamp(14px,1.2vw,18px);color:#fff;box-shadow:0 2px 5px rgba(50,28,39,.23),inset 0 1px 0 rgba(255,255,255,.22);background-origin:border-box}
+.performance-card::before{content:"";position:absolute;z-index:1;inset:0;pointer-events:none;background:linear-gradient(104deg,rgba(255,255,255,.1),transparent 32%,rgba(255,255,255,.08) 63%,transparent 90%),radial-gradient(ellipse 85% 32% at 52% 6%,rgba(255,255,255,.22),transparent 75%);mix-blend-mode:screen}
+.performance-card--price{background:radial-gradient(ellipse at 12% 100%,rgba(255,224,205,.8),transparent 48%),linear-gradient(165deg,#c34d70 0%,#a43156 44%,#791c35 100%)}
+.performance-card--catalogue{background:radial-gradient(ellipse at 50% 20%,rgba(226,211,255,.7),transparent 54%),linear-gradient(165deg,#9274ae 0%,#79476f 52%,#552c45 100%)}
+.performance-card--escrow{background:radial-gradient(ellipse at 90% 54%,rgba(255,176,100,.66),transparent 48%),linear-gradient(165deg,#cf4e3a 0%,#e06b3d 48%,#a52b39 100%)}
+.card-motion{position:absolute;z-index:0;inset:0;width:100%;height:100%;object-fit:cover;pointer-events:none;opacity:.2;mix-blend-mode:screen}
+.card-atmosphere{position:absolute;z-index:1;inset:0;pointer-events:none;overflow:hidden}
+.pc-kicker,.performance-card h3,.pc-metric,.pc-caption,.pc-link{position:relative;z-index:2}
+.pc-kicker{font:500 9px/1.2 var(--mono);letter-spacing:.12em;color:rgba(255,255,255,.8)}
+.performance-card h3{margin-top:7.4%;font-size:clamp(15px,1.6vw,23px);line-height:1.34;font-weight:500;letter-spacing:-.02em}
+.pc-metric{margin-top:auto;align-self:center;font-size:clamp(40px,6vw,86px);font-weight:300;letter-spacing:-.065em;line-height:.95;text-shadow:0 2px 25px rgba(49,11,30,.16)}
+.pc-metric>span:first-child:not(.pc-unit){font-size:.55em;vertical-align:.22em;margin-inline:2px}
+.pc-unit{font-size:.3em;letter-spacing:-.02em;margin-left:.12em}
+.pc-caption{align-self:center;width:88%;margin-top:5%;text-align:center;color:rgba(255,255,255,.85);font-size:clamp(11px,1.25vw,17px);line-height:1.42}
+.pc-link{display:flex;align-items:center;gap:9px;margin-top:9%;padding-bottom:3px;border-bottom:1px solid rgba(255,255,255,.48);color:#fff;text-decoration:none;font-size:11px}
+.pc-link span{font-size:14px;transition:transform .2s}.pc-link:hover span{transform:translate(2px,-2px)}
+.orbit{position:absolute;left:50%;top:50%;width:68%;aspect-ratio:1;border:1px solid rgba(255,255,255,.25);border-radius:50%;transform:translate(-50%,-50%) rotate(-30deg) scaleY(.55)}
+.orbit-b{width:88%;transform:translate(-50%,-50%) rotate(40deg) scaleY(.48)}
+.orbit-dot{position:absolute;top:26%;left:74%;width:7px;height:7px;border-radius:50%;background:#fff4d9;box-shadow:0 0 16px 5px rgba(255,226,189,.75);animation:orbit-float 4s ease-in-out infinite alternate}
+@keyframes orbit-float{to{transform:translate(-10px,18px)}}
+.catalogue-atmosphere{display:grid;grid-template-columns:repeat(3,1fr);grid-template-rows:repeat(3,1fr);gap:2%;padding:19% 13%;opacity:.5;transform:rotate(-16deg) scale(1.15)}
+.catalogue-atmosphere span{border:1px solid rgba(255,255,255,.65);border-radius:8px;background:linear-gradient(135deg,rgba(255,255,255,.2),rgba(255,255,255,.025));box-shadow:inset 0 1px 0 rgba(255,255,255,.22);animation:tile-glow 3.5s ease-in-out infinite alternate}
+.catalogue-atmosphere span:nth-child(3n){animation-delay:-1.2s}.catalogue-atmosphere span:nth-child(2n){animation-delay:-2.2s}
+@keyframes tile-glow{to{background-color:rgba(255,255,255,.13);transform:translateY(-3px)}}
+.escrow-line{position:absolute;left:17%;right:17%;top:45%;height:1px;background:linear-gradient(90deg,transparent,rgba(255,255,255,.82),transparent);box-shadow:0 0 18px rgba(255,255,255,.85)}
+.escrow-node{position:absolute;left:18%;top:calc(45% - 7px);width:14px;height:14px;border:1px solid rgba(255,255,255,.95);border-radius:50%;background:#ffcb9b;box-shadow:0 0 18px 5px rgba(255,234,210,.7)}
+.escrow-node--end{left:auto;right:18%;background:#ffe9cc}
+.performance-footnote{align-self:flex-end;color:rgba(34,34,34,.62);font-size:10px;line-height:1.5;text-align:right}
+
+/* People-to-contract comparison belt. */
+.machine-readable{position:relative;overflow:hidden;background:#eef0f2;color:#17191e;padding:clamp(74px,10vh,124px) 0 52px}
+.machine-copy{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(270px,.65fr);gap:5vw;align-items:end;max-width:1440px;margin:0 auto;padding:0 clamp(24px,8.9vw,128px)}
+.machine-eyebrow{color:#4c5158}
+.machine-copy h2{margin-top:16px;font-family:Newsreader,Georgia,serif;font-size:clamp(42px,6.2vw,84px);font-weight:400;line-height:.98;letter-spacing:-.045em}
+.machine-copy h2 em{font-weight:400}
+.machine-intro p{max-width:36ch;color:#3f454d;font-size:clamp(14px,1.25vw,17px);line-height:1.58}
+.machine-cta{display:inline-flex;align-items:center;gap:16px;margin-top:18px;padding:11px 18px;border-radius:999px;background:#ff5a1f;color:white;text-decoration:none;font-size:12px;transition:transform .25s,background .25s}
+.machine-cta:hover{transform:translateY(-2px);background:#e14c18}
+.machine-belt{--card-width:min(46vw,662px);--card-height:min(52vh,421px);--card-gap:clamp(24px,4.75vw,68px);position:relative;width:100%;height:calc(var(--card-height) + 140px);min-height:470px;margin-top:clamp(40px,7vh,70px);overflow:hidden;cursor:grab;touch-action:pan-y;user-select:none}
+.machine-belt.is-dragging{cursor:grabbing}
+.machine-code-layer,.machine-cards{position:absolute;inset:0;pointer-events:none}
+.machine-code{position:absolute;top:70px;left:0;width:var(--card-width);height:var(--card-height);overflow:hidden;clip-path:inset(0 100% 0 0);visibility:hidden;white-space:pre;color:#7a7f88;font:400 10px/1.42 var(--machine-mono,ui-monospace,monospace)}
+.machine-code code{position:absolute;left:3%;top:3%;width:49%;font:inherit;font-size:clamp(8px,.76vw,11px);line-height:1.45;white-space:pre;color:#747983}
+.machine-code small{position:absolute;left:53%;top:3%;width:45%;font:inherit;font-size:clamp(8px,.76vw,11px);line-height:1.45;color:#adb2b9;white-space:normal}
+.machine-card{position:absolute;top:70px;left:0;width:var(--card-width);height:var(--card-height);overflow:hidden;padding:clamp(20px,3vw,42px);border:1px solid rgba(255,255,255,.2);border-radius:clamp(14px,1.6vw,24px);color:#fff;will-change:transform,clip-path;box-shadow:0 22px 50px rgba(25,32,40,.16);}
+.machine-card::before{content:"";position:absolute;inset:0;pointer-events:none;background:linear-gradient(180deg,rgba(12,18,24,.18),transparent 42%,rgba(10,13,18,.52)),radial-gradient(ellipse at 100% 0%,rgba(255,255,255,.16),transparent 44%)}
+.machine-card--price{background:radial-gradient(ellipse at 80% 12%,rgba(215,233,251,.34),transparent 50%),linear-gradient(140deg,#41505b,#1d2732 58%,#293d49)}
+.machine-card--offer{background:radial-gradient(ellipse at 90% 14%,rgba(229,170,119,.45),transparent 50%),linear-gradient(140deg,#704b39,#332521 61%,#201a1a)}
+.machine-card--receipt{background:radial-gradient(ellipse at 85% 12%,rgba(182,226,181,.35),transparent 50%),linear-gradient(140deg,#31483f,#202a29 58%,#192324)}
+.mini-nav,.mini-label,.machine-card h3,.mini-rule,.mini-row,.mini-stamp{position:relative;z-index:1}
+.mini-nav{display:flex;align-items:center;justify-content:space-between;padding-bottom:14px;border-bottom:1px solid rgba(255,255,255,.25);font:500 9px/1.2 var(--machine-mono,ui-monospace,monospace);letter-spacing:.08em;color:rgba(255,255,255,.82)}
+.mini-brand{display:flex;align-items:center;gap:7px;font-family:var(--sans);font-size:12px;font-weight:600;letter-spacing:-.03em}
+.mini-brand i{width:8px;height:8px;border-radius:50%;background:#ff7440;box-shadow:0 0 0 3px rgba(255,116,64,.14)}
+.mini-label{margin-top:clamp(24px,4.4vh,42px);font:500 9px/1.2 var(--machine-mono,ui-monospace,monospace);letter-spacing:.1em;color:rgba(255,255,255,.62)}
+.machine-card h3{margin-top:12px;font:400 clamp(28px,3.7vw,50px)/1.04 Newsreader,Georgia,serif;letter-spacing:-.035em}
+.mini-rule{height:1px;background:rgba(255,255,255,.25);margin:clamp(22px,4vh,40px) 0 8px}
+.mini-row{display:flex;justify-content:space-between;gap:16px;padding:8px 0;border-bottom:1px solid rgba(255,255,255,.15);font-size:11px;color:rgba(255,255,255,.62)}
+.mini-row b{font-weight:500;text-align:right;color:rgba(255,255,255,.94)}
+.mini-stamp{display:inline-flex;margin-top:clamp(14px,3vh,25px);padding:8px 11px;border:1px solid rgba(255,255,255,.38);border-radius:999px;font:400 9px/1.2 var(--machine-mono,ui-monospace,monospace);color:rgba(255,255,255,.82)}
+.machine-fx{position:absolute;z-index:4;inset:0;width:100%;height:100%;pointer-events:none}
+.machine-scan{position:absolute;z-index:5;left:50%;top:56px;height:calc(var(--card-height) + 40px);width:1px;pointer-events:none}
+.machine-scan i{position:absolute;left:-2px;top:0;width:4px;height:100%;border-radius:4px;background:linear-gradient(180deg,#ff7a3c,#ff5a1f 12%,#ff5a1f 88%,#ff7a3c);box-shadow:0 0 10px 2px rgba(255,90,31,.78),0 0 34px 10px rgba(255,90,31,.32)}
+.machine-scan b{position:absolute;left:0;top:4%;width:42px;height:92%;background:linear-gradient(90deg,rgba(255,110,50,.43),transparent);filter:blur(6px)}
+.machine-badge{position:absolute;z-index:6;top:4px;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:7px;color:#8b9098;font-size:10px;white-space:nowrap}
+.machine-badge b{padding:6px 12px;border-radius:999px;background:#ff5a1f;color:#fff;font:500 10px/1.1 var(--machine-mono,ui-monospace,monospace);letter-spacing:.04em;box-shadow:0 0 18px rgba(255,90,31,.3)}
+.belt-hint{position:absolute;z-index:6;right:clamp(22px,4vw,58px);bottom:16px;color:#7f858c;font:400 10px/1.2 var(--machine-mono,ui-monospace,monospace)}
+.belt-hint span{margin-left:7px;color:#ff5a1f;font-size:15px}
+.machine-disclaimer{max-width:1440px;margin:14px auto 0;padding:0 clamp(24px,8.9vw,128px);text-align:right;color:#707780;font-size:11px}
+
+/* Scenic power footer, adapted to the compute project. */
+.cinema-footer{position:relative;isolation:isolate;min-height:100svh;overflow:hidden;padding:clamp(68px,8vh,100px) 0 28px;border:0;background:#25323a url("https://d2ol7oe51mr4n9.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/af6deff1-d678-4dc6-ae24-2880b16cdb20.jpg") center bottom/cover no-repeat;color:#f8f5ef}
+.cinema-footer::before{content:"";position:absolute;z-index:1;inset:0;background:linear-gradient(180deg,rgba(17,27,35,.52),rgba(17,27,35,.12) 45%,rgba(13,20,25,.6) 100%);transition:background 1s}
+.cinema-footer.is-offline::before{background:linear-gradient(180deg,rgba(7,13,25,.76),rgba(8,12,23,.22) 50%,rgba(5,9,17,.82))}
+.cinema-video{position:absolute;z-index:0;inset:0;width:100%;height:100%;object-fit:cover;object-position:center bottom}
+.cinema-content{position:relative;z-index:2;display:grid;grid-template-columns:minmax(270px,1.2fr) repeat(3,minmax(120px,.8fr));gap:clamp(24px,4vw,64px);width:min(100%,1440px);margin:auto;padding:0 clamp(24px,5.5vw,105px)}
+.cinema-brand{max-width:370px}
+.power-wordmark{display:flex;align-items:center;gap:0;padding:0;border:0;background:transparent;color:#fff;font:400 clamp(46px,5vw,70px)/1 Newsreader,Georgia,serif;letter-spacing:-.045em;cursor:pointer;text-align:left}
+.power-wordmark:hover .power-mark{filter:drop-shadow(0 0 12px rgba(255,255,255,.9))}
+.power-wordmark:active .power-mark{transform:scale(.94)}
+.power-mark{display:inline-grid;place-items:center;width:.62em;height:.82em;margin:0 .005em;transition:transform .18s,filter .3s;--lit:0}
+.power-mark svg{width:100%;height:100%;overflow:visible}
+.power-mark path{fill:none;stroke:currentColor;stroke-width:4.5;stroke-linecap:round}
+.power-mark .power-halo{stroke:rgba(255,255,255,.8);stroke-width:1.5;opacity:0;filter:blur(4px);transition:opacity .9s ease}
+.cinema-tagline{max-width:29ch;margin-top:22px;color:rgba(255,255,255,.88);font:400 clamp(17px,1.55vw,21px)/1.48 var(--sans)}
+.cinema-status{display:inline-flex;align-items:center;gap:8px;margin-top:20px;color:rgba(255,255,255,.68);font:400 10px/1.4 var(--machine-mono,ui-monospace,monospace);letter-spacing:.06em;text-transform:uppercase}
+.cinema-status i{width:7px;height:7px;border-radius:50%;background:#ff875b;box-shadow:0 0 10px #ff875b}
+.cinema-column h3{margin:8px 0 24px;font:400 29px/1 Newsreader,Georgia,serif;color:#fff}
+.cinema-column ul{display:flex;flex-direction:column;gap:15px;margin:0;padding:0;list-style:none}
+.cinema-column a{position:relative;width:fit-content;color:rgba(255,255,255,.79);font:400 13px/1.4 var(--sans);text-decoration:none}
+.cinema-column a::after{content:"";position:absolute;left:0;right:100%;bottom:-4px;height:1px;background:#fff;transition:right .32s cubic-bezier(.2,.8,.2,1)}
+.cinema-column a:hover::after{right:0}
+.cinema-legal{position:relative;z-index:2;display:flex;justify-content:space-between;gap:20px;max-width:1440px;margin:clamp(120px,24vh,260px) auto 0;padding:20px clamp(24px,5.5vw,105px) 0;border-top:1px solid rgba(255,255,255,.28);color:rgba(255,255,255,.6);font-size:10px;line-height:1.6}
+.cinema-legal p{max-width:82ch}
+.cinema-legal a{color:inherit;text-decoration:underline;text-underline-offset:3px}
+.cinema-light{position:absolute;z-index:4;left:var(--start-x,50%);top:var(--start-y,55%);width:8px;height:8px;border-radius:50%;background:#fff;opacity:0;pointer-events:none;box-shadow:0 0 10px 4px #fff,0 0 28px 13px rgba(188,215,255,.78)}
+.cinema-footer.is-flying .cinema-light{opacity:1;animation:power-flight .78s cubic-bezier(.65,0,.35,1) forwards}
+@keyframes power-flight{0%{transform:translate(0,0) scale(1.25)}55%{box-shadow:0 0 14px 8px #fff,0 0 38px 22px rgba(188,215,255,.8)}100%{left:var(--power-x);top:var(--power-y);transform:translate(-50%,-50%) scale(.3);opacity:.2}}
+.cinema-footer.is-lit .power-mark .power-halo{opacity:.9}
+.cinema-footer.is-arrived .cinema-content>*{animation:footer-rise .9s cubic-bezier(.16,1,.3,1) both}
+.cinema-footer.is-arrived .cinema-content>*:nth-child(2){animation-delay:.06s}.cinema-footer.is-arrived .cinema-content>*:nth-child(3){animation-delay:.12s}.cinema-footer.is-arrived .cinema-content>*:nth-child(4){animation-delay:.18s}
+@keyframes footer-rise{from{opacity:.05;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+@media(max-width:980px){.performance-head{grid-template-columns:1fr minmax(240px,.7fr)}.performance-cards{gap:12px}.performance-card{padding:7% 6%}.performance-card h3{font-size:17px}.pc-metric{font-size:clamp(36px,6.8vw,60px)}.performance-footnote{max-width:70ch}.machine-copy{padding-inline:6vw}.cinema-content{grid-template-columns:repeat(2,minmax(0,1fr))}.cinema-brand{grid-column:1/-1}.cinema-legal{margin-top:100px}}
+@media(max-width:767px){.performance-stage{min-height:100svh}.stage-motion--wide{display:none}.stage-motion--narrow{display:block}.performance-shell{justify-content:flex-start;min-height:auto;padding:44px 18px}.performance-head{grid-template-columns:1fr;gap:14px}.performance-head h2{font-size:clamp(30px,8vw,46px)}.performance-head>p{font-size:13px}.performance-cards{grid-template-columns:minmax(0,1fr);gap:14px;max-width:430px;margin:12px auto 0}.performance-card{width:100%;aspect-ratio:429/400;min-height:300px;padding:24px}.performance-card h3{font-size:20px;margin-top:24px}.pc-metric{font-size:68px}.pc-caption{font-size:14px}.pc-link{margin-top:18px}.performance-footnote{text-align:left;align-self:auto}.machine-readable{padding-top:74px}.machine-copy{grid-template-columns:1fr;gap:18px;padding-inline:22px}.machine-copy h2{font-size:clamp(42px,11vw,64px)}.machine-intro p{max-width:38ch}.machine-belt{--card-width:84vw;--card-height:350px;--card-gap:7vw;height:490px;min-height:490px;margin-top:45px}.machine-card{top:70px;padding:24px;border-radius:18px}.machine-code{top:70px}.machine-scan{top:56px;height:390px}.machine-badge{font-size:9px}.machine-code code,.machine-code small{font-size:8px}.machine-disclaimer{padding-inline:22px;text-align:left}.cinema-footer{min-height:940px;padding-top:52px}.cinema-footer::before{background:linear-gradient(180deg,rgba(17,27,35,.72),rgba(17,27,35,.14) 53%,rgba(13,20,25,.76) 100%)}.cinema-video{width:170%;height:auto;max-width:none;left:50%;top:auto;bottom:70px;transform:translateX(-50%);object-fit:contain;mask-image:linear-gradient(180deg,transparent,#000 18%)}.cinema-content{grid-template-columns:repeat(2,minmax(0,1fr));gap:32px 20px;padding-inline:24px}.cinema-brand{grid-column:1/-1}.power-wordmark{font-size:54px}.cinema-tagline{font-size:17px;margin-top:14px}.cinema-column h3{font-size:26px;margin-bottom:18px}.cinema-column ul{gap:12px}.cinema-column a{font-size:12px}.cinema-legal{display:block;margin-top:250px;padding-inline:24px}.cinema-legal p+p{margin-top:8px}}
+@media(max-width:400px){.machine-card{padding:20px}.mini-row{font-size:10px}.mini-stamp{font-size:8px}.cinema-footer{min-height:1020px}.cinema-legal{margin-top:285px}}
+@media(prefers-reduced-motion:reduce){.stage-motion,.card-motion{display:none}.orbit-dot,.catalogue-atmosphere span{animation:none}.machine-belt{cursor:auto}.cinema-video{display:none}.cinema-footer{background-image:linear-gradient(rgba(17,27,35,.45),rgba(13,20,25,.56)),url("https://d2ol7oe51mr4n9.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/af6deff1-d678-4dc6-ae24-2880b16cdb20.jpg")}.cinema-light{display:none}}
+.landing-page .brand .watchtower-lockup{display:block;width:220px;height:48px;max-width:32vw;object-fit:contain}.cinema-brand .power-wordmark{gap:12px}.cinema-brand .watchtower-footer-mark{display:block;width:48px;height:48px;flex:none;border-radius:12px}@media(max-width:520px){.landing-page .brand .watchtower-lockup{width:168px;height:auto;max-width:38vw}}
 </style>
 <script defer src="/_vercel/insights/script.js"></script>
 </head>
 <body>
 <video class="hero-video" id="heroVideo" autoplay muted loop playsinline preload="auto" poster="/media/corpus_ink_poster.jpg" aria-hidden="true"></video>
 <nav class="nav offset-up" id="nav" style="transform:translateY(-100%)"><div class="wrap nav-in">
-  <a class="brand" href="/">
-    <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><circle class="ring" cx="12" cy="12" r="10" fill="none" stroke-width="1.4"/><rect class="core" x="8.5" y="8.5" width="7" height="7"/></svg>
-    corpusAI <span class="on">on Monad<svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M11.782 0C8.37963 0 0 8.53443 0 11.9999C0 15.4654 8.37963 24 11.782 24C15.1844 24 23.5642 15.4653 23.5642 11.9999C23.5642 8.53458 15.1845 0 11.782 0ZM9.94598 18.8619C8.51124 18.4637 4.65378 11.5912 5.04481 10.1299C5.43584 8.66856 12.1834 4.73984 13.6181 5.1381C15.0529 5.5363 18.9104 12.4087 18.5194 13.87C18.1283 15.3314 11.3807 19.2602 9.94598 18.8619Z"/></svg></span>
-  </a>
+  <a class="brand" href="/"><img class="watchtower-lockup" src="/watchtower-logo.svg" alt="Watchtower" width="220" height="48" /></a>
   <div class="nav-links">
     <a href="#owning">owning_compute</a>
     <a href="#how">how_it_connects</a>
@@ -89,28 +274,99 @@ html:not(.lock) .lockup{opacity:1;transform:none}
   </div>
 </div></nav>
 
-<div class="page-root offset" id="pageRoot" style="transform:translateY(100vh)">
-<header class="hero">
-  <div class="hero-content"><div class="wrap">
+<div class="page-root offset" id="pageRoot">
+<header class="hero hero-v2">
+  <div class="hero-palette hero-palette--price" aria-hidden="true"></div>
+  <div class="hero-palette hero-palette--verify" aria-hidden="true"></div>
+  <div class="hero-palette hero-palette--own" aria-hidden="true"></div>
+  <div class="hero-palette hero-palette--settle" aria-hidden="true"></div>
+  <div class="hero-layout">
     <div class="hero-copy">
-    <p class="eyebrow">Monad Metropolis · Onchain finance and trading</p>
-    <h1>Compute you own.<br>Yield you keep.</h1>
-    <div class="lockup" aria-label="corpusAI on Monad">
-      <span style="display:flex;align-items:center;gap:10px"><svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><circle class="ring" cx="12" cy="12" r="10" fill="none" stroke-width="1.4"/><rect class="core" x="8.5" y="8.5" width="7" height="7"/></svg>corpusAI</span>
-      <span class="x">on</span>
-      <span class="mon">Monad<svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M11.782 0C8.37963 0 0 8.53443 0 11.9999C0 15.4654 8.37963 24 11.782 24C15.1844 24 23.5642 15.4653 23.5642 11.9999C23.5642 8.53458 15.1845 0 11.782 0ZM9.94598 18.8619C8.51124 18.4637 4.65378 11.5912 5.04481 10.1299C5.43584 8.66856 12.1834 4.73984 13.6181 5.1381C15.0529 5.5363 18.9104 12.4087 18.5194 13.87C18.1283 15.3314 11.3807 19.2602 9.94598 18.8619Z"/></svg></span>
+      <p class="eyebrow">Compute markets · Monad + Meta Earth</p>
+      <h1 class="hero-headline" aria-label="Price, verify, own, or settle compute in your terms.">
+        <span class="hero-cycle" aria-hidden="true">
+          <span class="cycle-item cycle-price"><span class="hero-icon"><svg viewBox="0 0 64 64"><path d="M14 48V34h9v14M28 48V23h9v25M42 48V13h9v35"/><path d="M11 52h42"/></svg></span><span>Price</span></span>
+          <span class="cycle-item cycle-verify"><span class="hero-icon"><svg viewBox="0 0 64 64"><path d="M32 10 49 17v13c0 12-7 19-17 24-10-5-17-12-17-24V17l17-7Z"/><path d="m24 31 6 6 12-13"/></svg></span><span>Verify</span></span>
+          <span class="cycle-item cycle-own"><span class="hero-icon"><svg viewBox="0 0 64 64"><path d="m32 11 20 10-20 10-20-10 20-10Z"/><path d="m12 32 20 10 20-10M12 42l20 10 20-10"/></svg></span><span>Own</span></span>
+          <span class="cycle-item cycle-settle"><span class="hero-icon"><svg viewBox="0 0 64 64"><path d="M14 24h31l-8-8M50 40H19l8 8"/><path d="M46 16 53 23 46 30M18 34l-7 7 7 7"/></svg></span><span>Settle</span></span>
+        </span><br><span class="hero-static">in your terms.</span>
+      </h1>
+      <p class="hero-note">A clearer path from compute price to onchain settlement.</p>
     </div>
+    <div class="hero-detail">
+      <p>Signed compute pricing and machine ownership on Monad. For Meta Earth, the native-MEC escrow contracts are prepared for testnet; live ME settlement is still pending deployment.</p>
+      <div class="hero-actions">
+        <a class="hero-button hero-button--dark" href="/mint">Open compute app <span aria-hidden="true">↗</span></a>
+        <a class="hero-button hero-button--line" href="#owning">Explore the protocol <span aria-hidden="true">↓</span></a>
+      </div>
     </div>
-  </div></div>
-  <span class="scroll-hint" aria-hidden="true">Scroll ↓</span>
+  </div>
 </header>
 
 <div class="page-sheet">
-<div class="hero-sub"><div class="wrap">
-  <p class="hero-lead">Own a machine as a token on Monad. Earn yield from jobs routed to your machine or speculate on deliverable compute.</p>
-  <p class="hero-lead">Underneath: a compute price oracle any contract can verify, x402 payments for prices settled on Monad, and a treasury that puts the float to work in Monad DeFi.</p>
-  <div class="actions"><a class="btn" href="/mint">Mint compute</a><a class="btn ghost" href="https://github.com/JTraversa/corpus-monad">Read the code</a><a class="btn ghost" href="https://cloud.trycorpus.ai">The price feed</a></div>
-</div></div>
+<section class="hero-sub" aria-label="Protocol overview">
+  <svg class="hero-notch" viewBox="0 0 1440 64" preserveAspectRatio="none" aria-hidden="true"><path d="M0 64H1062C1092 64 1098 56 1116 36C1138 11 1146 2 1178 2H1440V64Z"/></svg>
+  <div class="hero-sub-inner">
+    <p class="strip-intro"><span class="strip-kicker">A market for compute</span><strong>Price it.<br>Hold it.<br>Settle it.</strong></p>
+    <div class="hero-feature"><span class="feature-index">01 / PRICE</span><strong>Signed fixings</strong><span>EIP-712 price feed · live</span></div>
+    <div class="hero-feature"><span class="feature-index">02 / OWN</span><strong>Machine positions</strong><span>ERC-1155 · Monad</span></div>
+    <div class="hero-feature"><span class="feature-index">03 / SETTLE</span><strong>Native MEC escrow</strong><span>Meta Earth · deployment pending</span></div>
+    <a class="strip-scroll" href="#owning"><span>↓</span> Scroll to explore</a>
+  </div>
+</section>
+
+<section class="performance-stage" id="performance" aria-labelledby="performance-title">
+  <video class="stage-motion stage-motion--wide" autoplay muted loop playsinline preload="none" poster="https://d2ol7oe51mr4n9.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/5c3ec08f-2dbf-4c0a-8588-f6106a789443.webp" src="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260826_125226_45cb4f38-aa7e-47e1-885d-ae0b69745369.mp4" aria-hidden="true"></video>
+  <video class="stage-motion stage-motion--narrow" autoplay muted loop playsinline preload="none" poster="https://d2ol7oe51mr4n9.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/0f4926a4-e660-4df2-9195-2bfb3e341bdd.webp" src="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260826_125242_daae1570-386d-4bd5-8896-80499e2371e0.mp4" aria-hidden="true"></video>
+  <div class="performance-shell">
+    <div class="performance-head">
+      <div><p class="performance-eyebrow">THE COMPUTE MARKET · 01—03</p><h2 id="performance-title">Built for verifiable<br><span><i aria-hidden="true"></i>compute performance.</span></h2></div>
+      <p>Signed pricing, a registered compute catalogue, and delivery settlement with clear state transitions. These are the pieces the contracts and feed provide today.</p>
+    </div>
+    <div class="performance-cards" aria-label="Compute protocol capabilities">
+      <article class="performance-card performance-card--price">
+        <video class="card-motion" autoplay muted loop playsinline preload="none" poster="https://d2ol7oe51mr4n9.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/167977c6-8539-46b1-9a15-8dba566f50b8.png" src="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260826_130045_1a612b69-4854-4b34-8043-ccb91f2c60af.mp4" aria-hidden="true"></video>
+        <div class="card-atmosphere" aria-hidden="true"><span class="orbit orbit-a"></span><span class="orbit orbit-b"></span><span class="orbit-dot"></span></div>
+        <p class="pc-kicker">01 / PRICE</p><h3>Signed compute<br>fixings</h3><div class="pc-metric">EIP<span>·</span>712</div><p class="pc-caption">A publisher signature an oracle can verify onchain.</p><a class="pc-link" href="#live">View live surfaces <span>↗</span></a>
+      </article>
+      <article class="performance-card performance-card--catalogue">
+        <video class="card-motion" autoplay muted loop playsinline preload="none" poster="https://d2ol7oe51mr4n9.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/0446d1d5-e65e-4db5-8090-3e30d09afc43.png" src="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260826_130054_dd005674-d693-4d81-80a5-357f7f10b3a3.mp4" aria-hidden="true"></video>
+        <div class="card-atmosphere catalogue-atmosphere" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
+        <p class="pc-kicker">02 / OWN</p><h3>Compute sizes<br>in the catalogue</h3><div class="pc-metric">10<span class="pc-unit"> sizes</span></div><p class="pc-caption">ERC-1155 positions configured by the deployment catalogue.</p><a class="pc-link" href="/mint">Explore the catalogue <span>↗</span></a>
+      </article>
+      <article class="performance-card performance-card--escrow">
+        <video class="card-motion" autoplay muted loop playsinline preload="none" poster="https://d2ol7oe51mr4n9.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/da8d0242-4dee-4f6d-813f-a5887e86ad77.png" src="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260826_130103_7550f407-f14b-40a6-9616-7a26d7a8bd9f.mp4" aria-hidden="true"></video>
+        <div class="card-atmosphere escrow-atmosphere" aria-hidden="true"><span class="escrow-line"></span><span class="escrow-node"></span><span class="escrow-node escrow-node--end"></span></div>
+        <p class="pc-kicker">03 / SETTLE</p><h3>Delivery held<br>in native asset</h3><div class="pc-metric">MEC</div><p class="pc-caption">Meta Earth testnet deployment pending. Receipt hashes are audit records, not proof of execution.</p><a class="pc-link" href="/mint?network=me">See the ME flow <span>↗</span></a>
+      </article>
+    </div>
+    <p class="performance-footnote">The Meta Earth path is a testnet integration in progress. No live GPU provisioning or automatic job routing is claimed.</p>
+  </div>
+</section>
+
+<section class="machine-readable" id="machine-readable" aria-labelledby="machine-title">
+  <div class="machine-copy">
+    <div><p class="machine-eyebrow">HUMAN READABLE · CONTRACT VERIFIABLE</p><h2 id="machine-title">Built for people.<br><em>Read by machines.</em></h2></div>
+    <div class="machine-intro"><p>Each order starts as a clear offer, then resolves into the signed fields a contract can check. Move the strip to inspect the handoff.</p><a class="machine-cta" href="/mint?network=me">Open the MEC escrow demo <span>↗</span></a></div>
+  </div>
+  <div class="machine-belt" id="machineBelt" aria-label="Drag to compare a readable compute offer with its machine-readable fields">
+    <div class="machine-code-layer" aria-hidden="true">
+      <div class="machine-code"><code>&lt;h1&gt;Compute price fixing&lt;/h1&gt;<br>&lt;p&gt;Ticker: CX.H100SXM.NEO&lt;/p&gt;<br>&lt;p&gt;Signed by corpusAI publisher&lt;/p&gt;</code><small>{ "ticker": "CX.H100SXM.NEO", "signer": "EIP-712", "chain": "Monad" }</small></div>
+      <div class="machine-code"><code>&lt;h1&gt;MEC compute offer&lt;/h1&gt;<br>&lt;p&gt;Provider: reference provider&lt;/p&gt;<br>&lt;p&gt;Payment: native MEC&lt;/p&gt;</code><small>{ "market": "MEComputeMarket", "asset": "MEC", "state": "open" }</small></div>
+      <div class="machine-code"><code>&lt;h1&gt;Delivery receipt&lt;/h1&gt;<br>&lt;p&gt;Result hash recorded&lt;/p&gt;<br>&lt;p&gt;Buyer accepts or refunds&lt;/p&gt;</code><small>{ "receipt": "audit hash", "proof": false, "resolution": "buyer" }</small></div>
+    </div>
+    <div class="machine-cards">
+      <article class="machine-card machine-card--price"><div class="mini-nav"><span class="mini-brand"><i></i> corpusAI</span><span>PRICE FEED</span></div><p class="mini-label">SIGNED FIXING · MONAD</p><h3>H100 SXM<br>on-demand compute</h3><div class="mini-rule"></div><div class="mini-row"><span>Reference</span><b>CX.H100SXM.NEO</b></div><div class="mini-row"><span>Publisher</span><b>corpusAI · EIP-712</b></div><div class="mini-stamp">Signature verifiable onchain</div></article>
+      <article class="machine-card machine-card--offer"><div class="mini-nav"><span class="mini-brand"><i></i> Watchtower</span><span>COMPUTE OFFER</span></div><p class="mini-label">NATIVE ASSET · META EARTH</p><h3>Capacity with<br>funds held in escrow</h3><div class="mini-rule"></div><div class="mini-row"><span>Payment</span><b>MEC</b></div><div class="mini-row"><span>Fulfillment</span><b>Reference provider</b></div><div class="mini-stamp">Local CPU / simulated provider</div></article>
+      <article class="machine-card machine-card--receipt"><div class="mini-nav"><span class="mini-brand"><i></i> Watchtower</span><span>DELIVERY</span></div><p class="mini-label">BUYER CONTROL · ME ESCROW</p><h3>Accept delivery<br>or claim refund</h3><div class="mini-rule"></div><div class="mini-row"><span>Receipt</span><b>Audit hash only</b></div><div class="mini-row"><span>After deadline</span><b>Refund available</b></div><div class="mini-stamp">Provider withdraws after acceptance</div></article>
+    </div>
+    <canvas class="machine-fx" aria-hidden="true"></canvas>
+    <div class="machine-scan" aria-hidden="true"><i></i><b></b></div>
+    <div class="machine-badge"><span>Readable offer → contract fields</span><b>ME · MEC ESCROW</b></div>
+    <span class="belt-hint" aria-hidden="true">Drag to explore <span>↔</span></span>
+  </div>
+  <p class="machine-disclaimer">A receipt hash records the provider’s claim. It does not prove a GPU ran the job.</p>
+</section>
 
 <section class="sec" id="owning" style="padding-bottom:0"><div class="wrap">
   <div class="sec-head"><p class="eyebrow">Owning compute</p><h2>One token, three yield sources.</h2><p class="lead">A rented machine is a cost. An owned machine is an asset. The token makes compute something you hold the way you hold a yield-bearing position, deliverable any time you want to redeem it.</p></div>
@@ -170,35 +426,26 @@ html:not(.lock) .lockup{opacity:1;transform:none}
   <div class="actions"><a class="btn" href="/mint">Mint compute</a><a class="btn ghost" href="https://github.com/JTraversa/corpus-monad">GitHub</a></div>
 </div></section>
 
-<section class="wrap" id="builder"><div class="me">
-  <img src="/media/julian.jpg" width="320" height="320" alt="Julian Traversa's pixel-art avatar" loading="lazy" />
-  <div>
-    <p class="eyebrow">Who built this</p>
-    <h3>Julian Traversa</h3>
-    <p class="bio">Founder of corpusAI. Ten years building financial infrastructure: fixed rates, oracles, MEV and rebalancing. Co-author of EIP-4626. Based in Miami and NYC.</p>
-    <ul>
-      <li><span>web</span><a href="https://traversa.dev">traversa.dev</a></li>
-      <li><span>x</span><a href="https://x.com/TraversaJulian">@TraversaJulian</a></li>
-      <li><span>tg</span><a href="https://t.me/traversajulian">@traversajulian</a></li>
-      <li><span>mail</span><a href="mailto:julian@traversa.dev">julian@traversa.dev</a></li>
-    </ul>
+<footer class="cinema-footer" id="closingScene">
+  <video class="cinema-video" id="cinemaVideo" muted playsinline preload="none" poster="https://d2ol7oe51mr4n9.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/af6deff1-d678-4dc6-ae24-2880b16cdb20.jpg" aria-hidden="true"></video>
+  <span class="cinema-light" aria-hidden="true"></span>
+  <div class="cinema-content">
+    <div class="cinema-brand">
+      <button class="power-wordmark" id="scenePower" type="button" aria-label="Turn the Watchtower scene offline" aria-pressed="false"><img class="watchtower-footer-mark" src="/watchtower-mark.svg" width="48" height="48" alt="" /><span>Watchtower</span></button>
+      <p class="cinema-tagline">Compute stays yours when every order has a clear state.</p>
+      <span class="cinema-status"><i></i><span id="sceneStatus">Reference market online</span></span>
+    </div>
+    <div class="cinema-column"><h3>Protocol</h3><ul><li><a href="#owning">Machine ownership</a></li><li><a href="#how">How it works</a></li><li><a href="#live">Live surfaces</a></li></ul></div>
+    <div class="cinema-column"><h3>Build</h3><ul><li><a href="/mint">Open compute app</a></li><li><a href="https://github.com/JTraversa/corpus-monad">Source code</a></li><li><a href="https://cloud.trycorpus.ai/docs">Price feed API</a></li></ul></div>
+    <div class="cinema-column"><h3>Connect</h3><ul><li><a href="mailto:hello@trycorpus.ai">hello@trycorpus.ai</a></li><li><a href="https://x.com/TraversaJulian">X / corpusAI</a></li></ul></div>
   </div>
-</div></section>
-
-<footer><div class="wrap">
-  <div class="f-top">
-    <div><a class="brand" href="https://www.trycorpus.ai"><svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><circle class="ring" cx="12" cy="12" r="10" fill="none" stroke-width="1.4"/><rect class="core" x="8.5" y="8.5" width="7" height="7"/></svg>corpusAI</a><p class="f-b">Permanently funded compute.</p></div>
-    <div class="f-col"><h4>This submission</h4><ul><li><a href="/mint">Mint compute</a></li><li><a href="https://github.com/JTraversa/corpus-monad">Source</a></li></ul></div>
-    <div class="f-col"><h4>corpusAI Cloud Pricing</h4><ul><li><a href="https://cloud.trycorpus.ai/charts">Charts</a></li><li><a href="https://cloud.trycorpus.ai/docs">API</a></li><li><a href="https://cloud.trycorpus.ai/x402">Pay per request (x402)</a></li><li><a href="https://cloud.trycorpus.ai/governance">Governance</a></li></ul></div>
-    <div class="f-col"><h4>Contact</h4><ul><li><a href="mailto:hello@trycorpus.ai">hello@trycorpus.ai</a></li><li><a href="https://www.trycorpus.ai/terms">Terms</a></li><li><a href="https://www.trycorpus.ai/privacy">Privacy</a></li></ul></div>
-  </div>
-  <div class="f-bottom"><p class="legal">© 2026 corpusAI. A hackathon submission: the token is a proof of concept on Fly-sized machines, the yearly rate positions are priced at is not a quote or a guarantee, and nothing on this page is an offer to sell a security or a commodity contract.</p><p class="built">Built by <a href="https://x.com/TraversaJulian">Julian Traversa</a> and Alexandra</p></div>
-</div></footer>
+  <div class="cinema-legal"><p>© 2026 Watchtower. Meta Earth MEC escrow is prepared for testnet but has not been deployed. Provider execution is a local CPU reference or simulation; a receipt hash is not proof of computation.</p></div>
+</footer>
 </div>
 </div>
 
 <script type="module">
-import { CONFIG } from '/config.js';
+import { CONFIG } from '/networks.js';
 (function () {
   const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
   const nav = document.getElementById('nav'); const pageRoot = document.getElementById('pageRoot'); const vid = document.getElementById('heroVideo');
@@ -223,12 +470,13 @@ import { CONFIG } from '/config.js';
 })();
 const $ = (s) => document.querySelector(s);
 const short = (a) => a.slice(0, 6) + '…' + a.slice(-4);
-const addrLink = (a) => `<a href="${CONFIG.explorer}/address/${a}">${short(a)}</a>`;
-const mainLink = (a) => `<a href="${CONFIG.mainnetExplorer || CONFIG.explorer}/address/${a}">${short(a)}</a>`;
-if (CONFIG.treasury) $('#row-treasury td.addr').innerHTML = `treasury ${mainLink(CONFIG.treasury)} · vault ${mainLink(CONFIG.vault)} (mainnet)`;
+const addrLink = (a) => CONFIG.explorer ? `<a href="${CONFIG.explorer}/address/${a}">${short(a)}</a>` : short(a);
+const mainLink = (a) => (CONFIG.mainnetExplorer || CONFIG.explorer) ? `<a href="${CONFIG.mainnetExplorer || CONFIG.explorer}/address/${a}">${short(a)}</a>` : short(a);
+if (CONFIG.treasury) $('#row-treasury td.addr').innerHTML = CONFIG.vault ? `treasury ${mainLink(CONFIG.treasury)} · vault ${mainLink(CONFIG.vault)} (mainnet)` : `treasury ${addrLink(CONFIG.treasury)} · yield adapter not configured on ${CONFIG.chainName}`;
 if (CONFIG.kuruMarket) { const tr = document.createElement('tr'); tr.innerHTML = `<td>cS1-256 / USDC on Kuru</td><td class="addr">market ${addrLink(CONFIG.kuruMarket)} · two asks at $620 and $632.40 (testnet)</td><td><span class="pill ok">listed</span></td>`; $('#row-token').after(tr); }
 if (CONFIG.oracle) { $('#row-oracle td.addr').innerHTML = `${addrLink(CONFIG.oracle)} · fixing relayed ${CONFIG.txs?.relay ? `<a href="${CONFIG.explorer}/tx/${CONFIG.txs.relay}">tx</a>` : ''} (${CONFIG.chainName})`; $('#row-oracle .pill').outerHTML = '<span class="pill ok">live</span>'; }
 if (CONFIG.token) { $('#row-token td.addr').innerHTML = `${addrLink(CONFIG.token)} · mint ${CONFIG.txs?.mint ? `<a href="${CONFIG.explorer}/tx/${CONFIG.txs.mint}">tx</a>` : ''} · redeem ${CONFIG.txs?.redeem ? `<a href="${CONFIG.explorer}/tx/${CONFIG.txs.redeem}">tx</a>` : ''} (${CONFIG.chainName})`; $('#row-token .pill').outerHTML = '<span class="pill ok">live</span>'; }
 </script>
+<script type="module" src="/network-controls.js"></script>
 </body>
 </html>

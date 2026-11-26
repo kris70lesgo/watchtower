@@ -1,4 +1,10 @@
-# corpusAI on Monad
+# Watchtower
+
+Watchtower is the project name for this HARBOR application. It brings the inherited compute catalogue and signed-price infrastructure together with Meta Earth native-MEC escrow. corpusAI remains the publisher identity and source of inherited Monad components; those services are not represented as Watchtower-operated.
+
+> **Next.js application:** the core app now uses Next.js App Router, React and TypeScript. Run `npm ci`, `npm run dev`, or `npm run build && npm start`. The original design, machine catalogue, principal/buffer pricing, compute token and redemption flow are retained; ME is selected inside `/mint`, not a separate application. Public settings use `NEXT_PUBLIC_ME_*` in the root `.env`; private keys remain server-only. See [`docs/next-migration.md`](docs/next-migration.md) for architecture, commands and verification, [`harbor/README.md`](harbor/README.md) for ME deployment, and [`docs/harbor-submission.md`](docs/harbor-submission.md) for the incremental work. The original Monad project documentation follows below as historical context.
+
+## Inherited corpusAI Monad foundation
 
 Compute you own, yield you keep. Hold a corpus machine as a token on Monad. While held, jobs routed to the idle machine earn the holder yield; the token trades on its own value; and it redeems, any time, for a permanently funded machine whose principal is never spent. Underneath: a verifiable compute price oracle, x402 payments for prices in USDC on Monad, and a treasury that puts the float to work in Monad DeFi. Built for the Monad Metropolis hackathon, Track 4 (Trust, Identity and AI Infrastructure).
 

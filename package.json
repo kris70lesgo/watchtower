@@ -10,6 +10,7 @@
     "compile": "node harbor/scripts/compile.mjs",
     "preflight": "node --env-file-if-exists=.env harbor/scripts/preflight.mjs",
     "deploy:me": "node --env-file-if-exists=.env harbor/scripts/deploy.mjs",
+    "provider:relay": "node --env-file=.env.provider provider/relay.mjs",
     "demo:local": "node harbor/scripts/local.mjs",
     "start": "next start --hostname 127.0.0.1",
     "prepare:app": "node harbor/scripts/compile.mjs && node scripts/prepare-next.mjs",

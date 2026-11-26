@@ -15,6 +15,8 @@ let disposed = false; const listeners = [];
 function listen(target, event, callback) { target.addEventListener(event, callback); listeners.push(() => target.removeEventListener(event, callback)); }
 let provider, wallet, signer, account, busy = false, loadedOffer;
 const transactions = [], log = [];
+const relayPollers = new Map();
+let latestProviderJob;
 const states = ['Missing', 'Pending', 'Delivered', 'Accepted', 'Refunded'];
 const short = value => `${value.slice(0, 6)}…${value.slice(-4)}`;
 function status(message) { if (disposed) return; log.unshift(`${new Date().toLocaleTimeString()} · ${message}`); $('activity').textContent = log.slice(0, 30).join('\n'); }
@@ -22,6 +24,60 @@ function integer(field, max = Number.MAX_SAFE_INTEGER) { const value = Number($(
 function nonempty(field) { const text = $(field).value.trim(); if (!text) throw new Error(`${field} is required`); return text; }
 function market(runner = provider) { if (!config.market || !runner) throw new Error('Configure and connect the ME market first'); return new Contract(config.market, marketArtifact.abi, runner); }
 function oracle(runner = provider) { if (!config.oracle || !runner) throw new Error('Configure and connect the ME oracle first'); return new Contract(config.oracle, oracleArtifact.abi, runner); }
+async function relayRequest(path, payload) {
+  if (!config.providerRelay) throw new Error('No GPU provider relay is configured.');
+  const response = await fetch(`${config.providerRelay.replace(/\/$/, '')}${path}`, {
+    method: payload ? 'POST' : 'GET', headers: payload ? { 'Content-Type': 'application/json' } : {},
+    body: payload ? JSON.stringify(payload) : undefined, signal: AbortSignal.timeout(12000),
+  });
+  const result = await response.json().catch(() => ({}));
+  if (!response.ok) throw new Error(result.error || `Provider relay returned HTTP ${response.status}.`);
+  return result;
+}
+function showProviderJob(job) {
+  latestProviderJob = job;
+  $('job-status').textContent = `Order #${job.orderId} · ${job.state}${job.updatedAt ? ` · updated ${new Date(job.updatedAt).toLocaleTimeString()}` : ''}`;
+  $('job-result').textContent = job.result ? json({ result: job.result, receiptHash: job.receiptHash, receiptText: job.receiptText }) : (job.error || 'Waiting for the provider worker.');
+  if (job.state === 'completed') status(`GPU reference result ready for order #${job.orderId}. Provider must record delivery from the provider wallet.`);
+}
+async function loadProviderJob(jobId) {
+  if (!/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(jobId)) throw new Error('Enter the provider job ID shown when the order was queued.');
+  const job = await relayRequest(`/v1/jobs/${jobId}`);
+  showProviderJob(job);
+  return job;
+}
+function pollProviderJob(jobId) {
+  if (relayPollers.has(jobId)) return;
+  const timer = setInterval(async () => {
+    if (disposed) return;
+    try {
+      const job = await loadProviderJob(jobId);
+      if (['completed', 'failed', 'expired'].includes(job.state)) {
+        clearInterval(timer); relayPollers.delete(jobId);
+      }
+    } catch (error) {
+      $('job-status').textContent = `Relay check failed: ${error.message}`;
+      clearInterval(timer); relayPollers.delete(jobId);
+    }
+  }, 3000);
+  relayPollers.set(jobId, timer);
+}
+async function queueProviderJob(orderId, orderTxHash, requestText) {
+  if (!config.providerRelay) {
+    $('job-status').textContent = 'No provider relay configured. Continue with the manual provider handoff.';
+    return;
+  }
+  try {
+    const job = await relayRequest('/v1/jobs', { orderId, orderTxHash, requestText });
+    $('job-id').value = job.id;
+    try { sessionStorage.setItem(`watchtower-me-job-${orderId}`, job.id); } catch {}
+    showProviderJob(job); pollProviderJob(job.id);
+    status(`Order #${orderId} queued for the provider GPU worker. Share job ID ${job.id} with the provider.`);
+  } catch (error) {
+    $('job-status').textContent = `Order is confirmed on Meta Earth, but the provider relay could not queue it: ${error.message}`;
+    status('Order is already on-chain. Provider relay unavailable; manual fulfillment remains possible.');
+  }
+}
 async function requireSigner() {
   if (!signer) throw new Error('Connect your wallet first');
   const chain = await window.ethereum.request({ method: 'eth_chainId' });
@@ -50,6 +106,7 @@ function bind(button, action) {
 async function boot() {
   $('chain').textContent = config.name;
   if (location.protocol === 'https:' && new URL(config.rpc).protocol !== 'https:') throw new Error('HTTPS deployment requires VITE_ME_EVM_RPC to use HTTPS.');
+  if (config.providerRelay && location.protocol === 'https:' && new URL(config.providerRelay).protocol !== 'https:') throw new Error('HTTPS deployment requires VITE_ME_PROVIDER_RELAY_URL to use HTTPS.');
   if (!config.market || !config.oracle) $('setup').textContent = 'Setup required: deploy the ME contracts, then configure VITE_ME_MARKET and VITE_ME_ORACLE. Signature verification works without a wallet. No ME deployment is claimed yet.';
   provider?.destroy(); provider = undefined;
   provider = await connectRpc(config);
@@ -60,6 +117,18 @@ async function boot() {
     if (publisher.toLowerCase() !== config.publisher.toLowerCase()) throw new Error('Configured publisher does not match the on-chain oracle');
     $('setup').textContent = `${config.name}. Market ${config.market}. Oracle ${config.oracle}. ${config.chainId === 31337 ? 'Local development only; not ME evidence.' : 'Testnet MEC has no real monetary value.'}`;
     await refresh();
+  }
+  if (config.providerRelay) {
+    try {
+      const health = await relayRequest('/health');
+      if (Number(health.chainId) !== config.chainId) throw new Error('Provider relay is configured for a different chain.');
+      $('provider-health').textContent = `Relay ${health.workerOnline ? '· GPU worker online' : '· waiting for worker'}`;
+    } catch (error) {
+      $('provider-health').textContent = 'Relay offline';
+      $('job-status').textContent = `Remote provider unavailable: ${error.message}`;
+    }
+  } else {
+    $('provider-health').textContent = 'Relay not configured';
   }
 }
 async function refresh() {
@@ -87,7 +156,7 @@ bind('connect', async () => {
   try { await window.ethereum.request({ method: 'wallet_switchEthereumChain', params: [{ chainId }] }); }
   catch (error) {
     if (Number(error.code) !== 4902) throw error;
-    await window.ethereum.request({ method: 'wallet_addEthereumChain', params: [{ chainId, chainName: config.name, nativeCurrency: { name: 'MEC', symbol: 'MEC', decimals: 18 }, rpcUrls: [config.rpc] }] });
+    await window.ethereum.request({ method: 'wallet_addEthereumChain', params: [{ chainId, chainName: config.name, nativeCurrency: { name: 'MEC', symbol: 'MEC', decimals: 18 }, rpcUrls: [config.walletRpc] }] });
     await window.ethereum.request({ method: 'wallet_switchEthereumChain', params: [{ chainId }] });
   }
   wallet = new BrowserProvider(window.ethereum); signer = await wallet.getSigner(); account = getAddress(await signer.getAddress());
@@ -120,7 +189,11 @@ bind('order', async () => {
   const request = nonempty('request');
   const { offerId, offer } = await inspectOffer();
   if (!offer.active) throw new Error('Offer is inactive');
-  await transact('Place order', () => market(signer).order(offerId, integer('units', 10000), id(request), { value: offer.unitPrice * BigInt(integer('units', 10000)) }));
+  const receipt = await transact('Place order', () => market(signer).order(offerId, integer('units', 10000), id(request), { value: offer.unitPrice * BigInt(integer('units', 10000)) }));
+  const event = receipt.logs.map(log => { try { return market().interface.parseLog(log); } catch { return null; } }).find(parsed => parsed?.name === 'Ordered');
+  if (!event) throw new Error('Order confirmed, but its event could not be read. Refresh the order list and inspect the order.');
+  const orderId = Number(event.args.orderId); $('order-id').value = String(orderId);
+  await queueProviderJob(orderId, receipt.hash, request);
 });
 bind('pause-offer', () => transact('Pause offer', () => market(signer).setOfferActive(integer('toggle-offer-id'), false)));
 bind('resume-offer', () => transact('Resume offer', () => market(signer).setOfferActive(integer('toggle-offer-id'), true)));
@@ -155,6 +228,16 @@ async function checkReceipt() {
 }
 bind('inspect-order', inspectOrder);
 bind('check-receipt', checkReceipt);
+bind('load-job', async () => {
+  const jobId = nonempty('job-id'), job = await loadProviderJob(jobId);
+  if (!['completed', 'failed', 'expired'].includes(job.state)) pollProviderJob(jobId);
+});
+bind('use-job-receipt', () => {
+  if (!latestProviderJob?.receiptText) throw new Error('The provider has not completed this GPU job yet.');
+  $('order-id').value = String(latestProviderJob.orderId);
+  $('receipt').value = latestProviderJob.receiptText;
+  status(`Loaded the provider receipt for order #${latestProviderJob.orderId}. The provider must record it on-chain before buyer acceptance.`);
+});
 bind('deliver', () => { const receipt = nonempty('receipt'); return transact('Record delivery', () => market(signer).deliver(integer('order-id'), id(receipt))); });
 bind('accept', async () => { await checkReceipt(); return transact('Accept delivery', () => market(signer).accept(integer('order-id'))); });
 bind('refund', () => transact('Refund order', () => market(signer).refund(integer('order-id'))));
@@ -199,6 +282,6 @@ function start() {
 listen(window, 'corpus-network-ready', start);
 start();
 
-return () => { disposed = true; listeners.forEach(remove => remove()); window.ethereum?.removeListener?.('accountsChanged', accountChanged); window.ethereum?.removeListener?.('chainChanged', chainChanged); provider?.destroy(); wallet?.destroy(); onBusy(false); };
+return () => { disposed = true; listeners.forEach(remove => remove()); for (const timer of relayPollers.values()) clearInterval(timer); relayPollers.clear(); window.ethereum?.removeListener?.('accountsChanged', accountChanged); window.ethereum?.removeListener?.('chainChanged', chainChanged); provider?.destroy(); wallet?.destroy(); onBusy(false); };
 
 }

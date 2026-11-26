@@ -10,7 +10,12 @@ export function ComputeTools({ network }: { network: NetworkConfig }) {
   useEffect(() => {
     let active = true, cleanup: (() => void) | undefined;
     void import('@/harbor/main.mjs').then(({ mountComputeTools }) => {
-      if (active && root.current) cleanup = mountComputeTools(root.current, settlementEnvironment(network), setBusy);
+      const environment = settlementEnvironment(network);
+      if (environment.VITE_ME_EVM_RPC && window.location.protocol === 'https:' && new URL(environment.VITE_ME_EVM_RPC).protocol === 'http:') {
+        environment.VITE_ME_WALLET_RPC = environment.VITE_ME_EVM_RPC;
+        environment.VITE_ME_EVM_RPC = new URL('/api/me-rpc', window.location.origin).toString();
+      }
+      if (active && root.current) cleanup = mountComputeTools(root.current, environment, setBusy);
     }).catch(() => { if (active && root.current) root.current.textContent = 'Unable to initialize compute payment tools. Reload to retry.'; });
     return () => { active = false; cleanup?.(); };
   }, [network, setBusy]);

@@ -14,13 +14,18 @@ export function readConfig(env = {}) {
   const rpc = env.VITE_ME_EVM_RPC || env.ME_EVM_RPC || 'http://118.175.0.249:8545';
   const url = new URL(rpc);
   if (!['http:', 'https:'].includes(url.protocol)) throw new Error('RPC must use HTTP(S)');
+  const walletRpc = env.VITE_ME_WALLET_RPC || env.ME_WALLET_RPC || rpc;
+  if (!['http:', 'https:'].includes(new URL(walletRpc).protocol)) throw new Error('Wallet RPC must use HTTP(S)');
+  const providerRelay = env.VITE_ME_PROVIDER_RELAY_URL || env.ME_PROVIDER_RELAY_URL || '';
+  if (providerRelay && !['http:', 'https:'].includes(new URL(providerRelay).protocol)) throw new Error('Provider relay must use HTTP(S)');
   const address = value => value ? getAddress(value) : '';
   return {
-    chainId, rpc, market: address(env.VITE_ME_MARKET || env.ME_MARKET), oracle: address(env.VITE_ME_ORACLE || env.ME_ORACLE),
+    chainId, rpc, walletRpc, market: address(env.VITE_ME_MARKET || env.ME_MARKET), oracle: address(env.VITE_ME_ORACLE || env.ME_ORACLE),
     token: address(env.VITE_ME_TOKEN || env.ME_TOKEN), usdc: address(env.VITE_ME_USDC || env.ME_USDC),
     publisher: address(env.VITE_ME_PUBLISHER || env.ME_PUBLISHER || PUBLISHER),
     rest: env.VITE_ME_REST || env.ME_REST || '',
     explorer: env.VITE_ME_EXPLORER || env.ME_EXPLORER || '',
+    providerRelay,
     name: chainId === 31337 ? 'Local development' : 'Meta Earth testnet',
   };
 }

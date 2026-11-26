@@ -5,6 +5,7 @@ export type NetworkConfig = {
   nativeSymbol: string; mockUsdc: boolean; token: string; usdc: string;
   oracle: string; treasury: string; explorer: string; publisher: string;
   feed: string; repo: string; vault?: string; mainnetExplorer?: string;
+  providerRelay?: string;
   kuruMarket?: string; market?: string; rest?: string; txs: Record<string, string>;
 };
 export type Networks = Record<NetworkKey, NetworkConfig>;

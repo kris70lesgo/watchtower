@@ -8,6 +8,8 @@ node_modules/
 .vercel
 .env*
 !.env.example
+provider/.env.provider
+provider/data/
 harbor/dist/
 dist/
 .next/

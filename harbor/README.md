@@ -28,7 +28,7 @@ Next.js reads the root `.env`; production output is `.next/`. See `../docs/next-
 
 Deployment transactions and addresses are saved incrementally under `harbor/deployments/`, including confirmed deployments if a later transaction fails. The deployment helper intentionally supports ME testnet only. It never reuses Monad addresses as ME deployments.
 
-The official SDK documents testnet EVM defaults of chain ID 400 and `http://118.175.0.249:8545`. Confirm current availability with the organizers; configure an HTTPS EVM RPC for an HTTPS-hosted app. Do not disable browser mixed-content protections. The optional identity lookup uses the documented ME Hub REST host and path, but its live response remains to be verified.
+The official SDK documents testnet EVM defaults of chain ID 400 and `http://118.175.0.249:8545`. Confirm current availability with the organizers. Prefer an official HTTPS EVM RPC for a hosted app. If only the documented HTTP endpoint is available, Next.js proxies the app's allowlisted read calls through `/api/me-rpc`; the connected wallet still uses its configured ME RPC. Do not disable browser mixed-content protections. The optional identity lookup uses the documented ME Hub REST host and path, but its live response remains to be verified.
 
 ## Configuration
 
